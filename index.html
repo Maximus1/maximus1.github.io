@@ -135,7 +135,7 @@
             }
 
             allRepos = await response.json();
-            renderRepos(allRepos.filter(repo => !repo.fork));
+            renderRepos(allRepos.filter(repo => !repo.fork && repo.name !== 'maximus1.github.io'));
 
         } catch (error) {
             console.error('Fehler beim Laden der Repos:', error);
@@ -181,7 +181,7 @@
     document.getElementById('repo-search').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
         const filtered = allRepos.filter(repo => 
-            !repo.fork && 
+            !repo.fork && repo.name !== 'maximus1.github.io' &&
             (repo.name.toLowerCase().includes(term) || 
              (repo.description && repo.description.toLowerCase().includes(term)) ||
              (repo.language && repo.language.toLowerCase().includes(term)) ||
