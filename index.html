@@ -23,12 +23,22 @@
 
         header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         #repo-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
         }
 
         article {
@@ -36,7 +46,9 @@
             border: 1px solid #e1e4e8;
             border-radius: 8px;
             padding: 20px;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             transition: transform 0.2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
@@ -63,17 +75,35 @@
 
         .description {
             margin-bottom: 15px;
+            flex-grow: 1;
         }
 
         .tags {
             display: flex;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
             font-size: 0.8em;
+            margin-top: 10px;
         }
 
         .language {
             font-weight: bold;
             color: #586069;
+        }
+
+        .topic-tag {
+            background: #e1ecf4;
+            color: #39739d;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        #repo-search {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
         }
     </style>
 </head>
@@ -82,6 +112,9 @@
 <header>
     <h1>Meine Projekte</h1>
     <p>Eine Übersicht meiner GitHub Repositories als Artikel</p>
+    <div class="search-container">
+        <input type="text" id="repo-search" placeholder="Projekte durchsuchen (z.B. Python, Tools...)" />
+    </div>
 </header>
 
 <main id="repo-container">
@@ -90,6 +123,7 @@
 
 <script>
     const GITHUB_USERNAME = 'Maximus1';
+    let allRepos = [];
 
     async function fetchRepos() {
         const container = document.getElementById('repo-container');
@@ -100,39 +134,63 @@
                 throw new Error(`Fehler: ${response.status}`);
             }
 
-            const repos = await response.json();
-            container.innerHTML = ''; 
+            allRepos = await response.json();
+            renderRepos(allRepos.filter(repo => !repo.fork));
 
-            repos
-                .filter(repo => !repo.fork)
-                .forEach(repo => {
-                    const article = document.createElement('article');
-                    
-                    const date = new Date(repo.updated_at).toLocaleDateString('de-DE', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-
-                    article.innerHTML = `
-                        <div class="meta">Zuletzt aktualisiert am ${date}</div>
-                        <h2><a href="${repo.html_url}" target="_blank">${repo.name}</a></h2>
-                        <p class="description">${repo.description || 'Keine Beschreibung verfügbar.'}</p>
-                        <div class="tags">
-                            <span class="language">${repo.language || ''}</span>
-                            <span>⭐ ${repo.stargazers_count}</span>
-                        </div>
-                    `;
-                    container.appendChild(article);
-                });
         } catch (error) {
             console.error('Fehler beim Laden der Repos:', error);
             container.innerHTML = '<p>Fehler beim Laden der Repositories. Bitte prüfe die Konsole für Details.</p>';
         }
     }
 
+    function renderRepos(repos) {
+        const container = document.getElementById('repo-container');
+            container.innerHTML = ''; 
+
+        if (repos.length === 0) {
+            container.innerHTML = '<p>Keine passenden Projekte gefunden.</p>';
+            return;
+        }
+
+            repos
+                .forEach(repo => {
+                    const article = document.createElement('article');
+                    
+                    const date = new Date(repo.updated_at).toLocaleDateString('de-DE', {
+                    year: 'numeric', month: 'short', day: 'numeric'
+                    });
+
+                const topics = repo.topics ? repo.topics.map(t => `<span class="topic-tag">${t}</span>`).join('') : '';
+
+                    article.innerHTML = `
+                    <div>
+                        <div class="meta">Update: ${date}</div>
+                        <h2><a href="${repo.html_url}" target="_blank">${repo.name.replace(/-/g, ' ')}</a></h2>
+                        <p class="description">${repo.description || 'Projekt ohne Beschreibung.'}</p>
+                    </div>
+                    <div class="tags">
+                        <span class="language">${repo.language || ''}</span>
+                        ${topics}
+                        <span>⭐ ${repo.stargazers_count}</span>
+                    </div>
+                    `;
+                    container.appendChild(article);
+                });
+    }
+
+    document.getElementById('repo-search').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = allRepos.filter(repo => 
+            !repo.fork && 
+            (repo.name.toLowerCase().includes(term) || 
+             (repo.description && repo.description.toLowerCase().includes(term)) ||
+             (repo.language && repo.language.toLowerCase().includes(term)) ||
+             (repo.topics && repo.topics.some(t => t.toLowerCase().includes(term))))
+        );
+        renderRepos(filtered);
+    });
+
     fetchRepos();
 </script>
-
 </body>
 </html>
