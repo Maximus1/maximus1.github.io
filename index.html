@@ -302,6 +302,7 @@ html, body {
   line-height: 1.55; flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -830,13 +831,44 @@ async function fetchRepos() {
   const grid = document.getElementById('tilesGrid');
   grid.innerHTML = Array(8).fill('<div class="tile-skeleton"></div>').join('');
 
-  // Avatar
+  // 1. URL-Parameter auslesen und prüfen, ob ein "Switch" vorhanden ist
+  const urlParams = new URLSearchParams(window.location.search);
+  const forceRefresh = urlParams.has('nocache') || urlParams.get('refresh') === 'true';
+
+  // Cache-Schlüssel und Dauer (15 Minuten) einrichten
+  const CACHE_KEY_REPOS  = 'github_repos_cache';
+  const CACHE_KEY_AVATAR = 'github_avatar_cache';
+  const CACHE_KEY_TIME   = 'github_cache_time';
+  const CACHE_DURATION   = 15 * 60 * 1000; 
+
+  const cacheTime    = localStorage.getItem(CACHE_KEY_TIME);
+  const cachedRepos  = localStorage.getItem(CACHE_KEY_REPOS);
+  const cachedAvatar = localStorage.getItem(CACHE_KEY_AVATAR);
+
+  // 2. Nur wenn KEIN Force-Refresh aktiv ist, nutzen wir den Cache
+  if (!forceRefresh && cacheTime && cachedRepos && (Date.now() - cacheTime < CACHE_DURATION)) {
+    allRepos = JSON.parse(cachedRepos);
+    renderTiles(allRepos);
+    if (cachedAvatar) document.getElementById('avatarImg').src = cachedAvatar;
+    
+    const cnt = document.getElementById('repoCount');
+    cnt.textContent = allRepos.length;
+    cnt.style.opacity = '1';
+    return; // Steigt hier direkt aus, da Cache genutzt wird
+  }
+
+  // 3. Wenn Cache abgelaufen ODER der Switch aktiv ist -> API frisch abfragen
+  // Avatar-Abruf
   fetch(`https://api.github.com/users/${GITHUB_USER}`)
     .then(r => r.json())
     .then(u => {
-      if (u.avatar_url) document.getElementById('avatarImg').src = u.avatar_url;
+      if (u.avatar_url) {
+        document.getElementById('avatarImg').src = u.avatar_url;
+        localStorage.setItem(CACHE_KEY_AVATAR, u.avatar_url);
+      }
     }).catch(() => {});
 
+  // Repositories-Abruf
   try {
     let repos = [], page = 1;
     while (true) {
@@ -851,11 +883,30 @@ async function fetchRepos() {
       page++;
     }
     allRepos = repos.filter(r => r.name !== 'maximus1.github.io');
+    
+    // Daten erfolgreich geladen -> Frisch in den Speicher schreiben
+    localStorage.setItem(CACHE_KEY_REPOS, JSON.stringify(allRepos));
+    localStorage.setItem(CACHE_KEY_TIME, Date.now().toString());
+
     renderTiles(allRepos);
     const cnt = document.getElementById('repoCount');
     cnt.textContent = allRepos.length;
     cnt.style.opacity = '1';
+
   } catch (e) {
+    // Fallback: Falls die API blockiert (403), aber alte Cache-Daten existieren, zeige diese trotz Ablauf/Switch an
+    if (cachedRepos) {
+      allRepos = JSON.parse(cachedRepos);
+      renderTiles(allRepos);
+      if (cachedAvatar) document.getElementById('avatarImg').src = cachedAvatar;
+      const cnt = document.getElementById('repoCount');
+      cnt.textContent = allRepos.length;
+      cnt.style.opacity = '1';
+      console.warn("API blockiert (Rate Limit?). Fallback auf alten Cache erfolgreich.");
+      return;
+    }
+
+    // Wenn gar nichts geht, Fehler anzeigen
     grid.innerHTML = `<div class="empty-state">
       <div class="icon">⚠</div>
       <div>Fehler beim Laden der Repositories</div>
