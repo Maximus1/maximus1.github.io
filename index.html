@@ -892,6 +892,7 @@ async function fetchRepos() {
     const cnt = document.getElementById('repoCount');
     cnt.textContent = allRepos.length;
     cnt.style.opacity = '1';
+    startPlaceholderRotation();
 
   } catch (e) {
     // Fallback: Falls die API blockiert (403), aber alte Cache-Daten existieren, zeige diese trotz Ablauf/Switch an
@@ -1099,7 +1100,7 @@ document.addEventListener('keydown', e => {
    INIT
 ══════════════════════════════════════════════ */
 fetchRepos();
-startPlaceholderRotation();
+
 
 /* ── Search clear button ── */
 document.getElementById('searchInput').addEventListener('input', function () {
