@@ -25,6 +25,532 @@
             }
         }
     </script>
+    <!-- i18n: DE/EN nach Systemsprache (localStorage-Override per Header-Toggle) -->
+    <script>
+        window.__I18N = {
+            de: {
+                'badge.3dtools': '3D-Druck Tools',
+                'header.sub': 'Analyse, Multi-Plate Vorschau & Gewichtsoptimierung für 3MF-Projektdateien',
+                'header.load': '3MF / STL Laden',
+                'header.demo': 'Demo laden',
+                'drop.title': '3MF Datei hier ablegen',
+                'drop.sub': 'Liest Mesh-Komponenten, Druckplatten & Slicer-Metadaten aus',
+                'grid.title': 'Druckplatten im Projekt',
+                'grid.showAll': 'Alle Platten anzeigen',
+                'grid.closeTitle': 'Übersicht schliessen (ESC)',
+                'grid.hint': 'Klick auf eine Platte wählt sie aus (wie im Dropdown). ESC oder Schliessen zeigt wieder die 3D-Ansicht.',
+                'grid.hintSupport': '  Hinweis: Stützmaterial ist (wie in der Gesamtschätzung) nicht eingerechnet.',
+                'vp.resetCam': 'Kamera zurücksetzen',
+                'vp.wireframe': 'Wireframe umschalten',
+                'vp.bbox': 'Bounding Box anzeigen',
+                'vp.axes': 'Achsen-Anzeige (X/Y/Z)',
+                'vp.autoRotate': 'Auto-Rotation',
+                'tb.plate': 'Druckplatte:',
+                'tb.focusTitle': 'Fokussiert die gewählte Druckplatte',
+                'tb.focus': 'Fokussieren',
+                'tb.gridTitle': 'Druckplatten-Übersicht (Raster)',
+                'tb.grid': 'Übersicht',
+                'tb.splitTitle': 'Erkennt räumlich getrennte Druckplatten automatisch',
+                'tb.split': 'Auto-Platten (Räumlich)',
+                'dim.label': 'Abmessungen:',
+                'dim.x': 'Breite (X)',
+                'dim.y': 'Tiefe (Y)',
+                'dim.z': 'Höhe (Z)',
+                'tab.analysis': 'Analyse',
+                'tab.all': 'Alle',
+                'tab.weight': 'Gewicht',
+                'tab.ai': 'KI-Tipps',
+                'file.none': 'Keine Datei geladen',
+                'file.hint': 'Ziehe eine .3mf Datei hierher',
+                'st.volume': 'Gedrucktes Volumen (Schätzung)',
+                'st.surface': 'Oberfläche',
+                'st.triangles': 'Dreiecke (Polygone)',
+                'st.objects': 'Bauteile / Objekte',
+                'thumb.title': 'Eingebettete Slicer-Vorschau',
+                'thumb.all': 'Alle Druckplatten',
+                'thumb.alt': '3MF Thumbnail',
+                'parts.inSel': 'Bauteile in der Auswahl',
+                'parts.none': 'Keine Bauteile geladen',
+                'opt.info': 'Simuliere Filamentgewicht basierend auf Wandstärke, Infill-Muster und Dichte.',
+                'opt.material': 'Filament-Material',
+                'opt.pla': 'PLA (Standard ~1.24 g/cm³)',
+                'opt.walls': 'Anzahl Wandlinien (Perimeter)',
+                'opt.layers': 'Obere/Untere Deckschichten',
+                'opt.infill': 'Infill-Dichte (Füllung)',
+                'mass.calcTitle': 'Berechnetes Gewicht',
+                'mass.for': 'Filamentbedarf für',
+                'mass.allPlates': 'Alle Druckplatten',
+                'mass.est': 'Geschätztes Gewicht',
+                'mass.ofWhichInfill': 'Davon Infill',
+                'mass.wallsAndSkins': 'Wände & Decken',
+                'mass.infill': 'Füllung (Infill)',
+                'mass.walls': 'Wände (Perimeter)',
+                'mass.solid': 'Festmaterial',
+                'mass.brim': 'Brim',
+                'mass.filLen': 'Filamentlänge (geschätzt)',
+                'ai.title': 'KI-Analyse für 3D-Druck & Cosplay',
+                'ai.desc': 'Echte KI-Analyse (Kilo Gateway, kostenlose Modelle, ohne Login/API-Key) auf Basis deiner Geometrie-, Slicer- und Massedaten. Wähle ein Ziel, dann generiert die KI konkrete Slicer-Empfehlungen.',
+                'ai.goal': 'Optimierungsziel (Präferenz)',
+                'ai.goal.balance': 'Balance / ausgewogen (Gewicht sparen, Stabilität halten)',
+                'ai.goal.stabilitaet': 'Stabilität maximieren',
+                'ai.goal.gewicht': 'Gewicht reduzieren',
+                'ai.goal.material': 'Material sparen',
+                'ai.goal.druckzeit': 'Druckzeit reduzieren',
+                'ai.goal.oberflaeche': 'Oberflächenqualität',
+                'ai.goal.masshalt': 'Maßhaltigkeit',
+                'ai.goal.cosplay': 'Cosplay / tragbares Bauteil (leicht + schleifbar)',
+                'ai.goal.funktional': 'Funktionales Bauteil (belastbar)',
+                'ai.goal.optisch': 'Optisches Bauteil (Show-Teil)',
+                'ai.model': 'KI-Modell',
+                'ai.modelAuto': 'kilo-auto/free (Auto, empfohlen)',
+                'ai.length': 'Antwortlänge',
+                'ai.tokShort': 'Kurz (~1k Tokens)',
+                'ai.tokStd': 'Standard (~1,5k)',
+                'ai.tokLong': 'Ausführlich (~3k)',
+                'ai.generate': 'Slicer-Empfehlung generieren',
+                'ai.copyTitle': 'Fertigen KI-Prompt in die Zwischenablage kopieren (für ChatGPT/Claude/Kilo)',
+                'ai.copy': 'Prompt kopieren',
+                'ai.stopTitle': 'Anfrage abbrechen',
+                'ai.stop': 'Stopp',
+                'ai.localNote': 'Lokale Einschätzung aus deinen Geometrie-, Slicer- und Massedaten — ganz ohne Server. <b>Prompt kopieren</b> überträgt alle Zahlen in ChatGPT/Claude/Kilo für eine ausführliche Analyse. Wird die Seite über http(s) geöffnet, versucht der Button zusätzlich eine anonyme Kilo-Direktabfrage (:free-Modelle).',
+                'ai.initial': 'Klicke auf den Button oben, um eine geometrie-basierte Analyse zu starten.',
+                'toast.invalidFile': 'Bitte lade eine gültige .3mf oder .stl Datei hoch.',
+                'toast.3mfPlates': '3MF-Modell mit Druckplatten-Struktur geladen!',
+                'toast.3mf': '3MF-Modell geladen!',
+                'toast.noObjects': 'Keine gültigen 3D-Objekte in der 3MF-Datei gefunden.',
+                'toast.3mfErr': 'Konnte 3MF-Container nicht auslesen.',
+                'toast.stl': 'STL-Datei erfolgreich geladen!',
+                'toast.stlErr': 'Fehler beim Verarbeiten der STL-Datei.',
+                'toast.notEnough': 'Es sind nicht genügend Bauteile für ein Aufteilen vorhanden.',
+                'toast.split': 'Bauteile auf {n} Druckplatten aufgeteilt!',
+                'toast.demo': 'Demo-Projekt mit 3 Druckplatten geladen!',
+                'file.details': '{mb} MB • .{ext} Datei',
+                'opt.fromProject': 'aus Projekt',
+                'plate.allWithParts': 'Alle Druckplatten ({n} Bauteile)',
+                'plate.allInitial': 'Alle Druckplatten (0 Bauteile)',
+                'plate.withParts': '{id} ({n} Bauteil{p})',
+                'plate.partsCount': '{n} Bauteil(e)',
+                'plate.selected': '· ausgewählt',
+                'plate.allLabel': 'Alle Druckplatten',
+                'plate.all': 'Alle',
+                'plate.pre': 'Druckplatte ',
+                'plate.plate': 'Plate ',
+                'comp.empty': 'Keine Bauteile ausgewählt',
+                'comp.part': 'Bauteil ',
+                'comp.negPrefix': 'Negativ-',
+                'comp.negative': '(Negativ)',
+                'mass.calc': 'wird berechnet …',
+                'mass.ofProject': '% des Gesamtprojekts',
+                'mass.approx': ' (grob)',
+                'grid.sum': 'Σ aller Platten ≈ ',
+                'grid.calcSum': 'Filamentbedarf wird berechnet …',
+                'grid.calcTile': 'Filament wird noch berechnet …',
+                'grid.calcSum2': 'Filament wird noch berechnet …',
+                'vx.voxelModel': 'Voxel-Modell',
+                'vx.geoModel': 'Geometrisches Modell',
+                'vx.infillLine': 'Infill-Linie {v} mm, Muster {p} (Querschnitt exakt: Linie x Schicht - Ecken)',
+                'vx.skin': 'Haut oben {t} mm / unten {b} mm',
+                'vx.bed': 'Druckbett {w} × {d} mm (aus 3MF)',
+                'vx.bed3': 'Druckbett {w} × {d} × {h} mm (aus 3MF)',
+                'vx.solidUnder': 'Festmaterial: Slicer füllt bei "{ev}" zusätzlich unter schrägen Flächen - hier um ~30-40 % unterschätzt',
+                'vx.supportNote': 'ACHTUNG: Stützen ({t}) samt Stützen-Brim sind NICHT eingerechnet',
+                'vx.skirtNote': 'Skirt nicht eingerechnet',
+                'vx.ironingNote': 'Ironing nicht eingerechnet',
+                'demo.details': '4.2 MB • Multi-Plate 3MF Demo',
+                'demo.helmet': 'Haupt-Helmschale',
+                'demo.visor': 'Visier-Verstärkung',
+                'demo.hornL': 'Aufsatz-Horn Links',
+                'demo.hornR': 'Aufsatz-Horn Rechts',
+                'demo.ringA': 'Kopplungs-Ring A',
+                'demo.ringB': 'Kopplungs-Ring B',
+                'prompt.copied': 'Prompt kopiert ({n} Zeichen) - in ChatGPT/Claude/Kilo einfügen.',
+                'prompt.copiedFallback': 'Prompt kopiert (Fallback) - in ChatGPT/Claude/Kilo einfügen.',
+                'ai.sys': 'Du bist Slicer-Experte (Bambu, Orca, FDM). Deutsch, kompakt.',
+                'ai.task': 'Aufgabe: max 6 Änderungen (Param alt-neu + Wirkung), 1 Satz Fazit.',
+                'ai.taskHead': 'AUFGABE:',
+                'ai.sysHead': 'SYSTEM:',
+                'ai.asking': 'Frage KI ({m}) zu Ziel ...',
+                'ai.recommend': 'KI-Empfehlung ({m})',
+                'ai.basisMass': 'Basis: Masse {g} | anonym via Kilo Gateway (:free).',
+                'ai.fileHint': 'Hinweis: file://-Modus - Direktabfrage blockiert der Browser (CORS). Nutze <b>Prompt kopieren</b>.',
+                'ai.aborted': 'Abgebrochen.',
+                'ai.gatewayHint': 'Hinweis: KI-Gateway nicht erreichbar ({e}). Lokale Einschätzung + <b>Prompt kopieren</b> für ChatGPT/Claude/Kilo.',
+                'ai.localAssess': 'Lokale Einschätzung: ',
+                'ai.basis': 'Basis: ',
+                'ai.bWand': 'Wand ',
+                'ai.bFest': 'Fest ',
+                'ai.bFill': 'Füllung ',
+                'ai.bPart': 'Bauteil ',
+                'ai.parts': ' Teile, ',
+                'ai.tipNote': 'Tipp: <b>Prompt kopieren</b> überträgt alle Zahlen in ChatGPT/Claude/Kilo für eine ausführliche Analyse.',
+                'vx.reading': 'Voxel-Analyse: Projekt wird gelesen ...',
+                'vx.obj': 'Voxel-Analyse: Objekt {id} ({i}/{n})',
+                'vx.objLayer': 'Voxel-Analyse: Objekt {id} Schicht {p}%',
+                'vx.done': 'Voxel-Analyse fertig ({n} Objekte)',
+                'vx.error': 'Voxel-Analyse: {e}',
+                'tip.wallLines': 'Wandlinien',
+                'tip.keep2': 'bei 2 belassen',
+                'tip.minSanding': 'Minimum für Schleifbarkeit',
+                'tip.wallBreak': '1 Wandlinie reisst beim Schleifen',
+                'tip.wallVolDown': 'Wandvolumen sinkt ~1/3',
+                'tip.wallWhyThin': 'dünnwandige Cosplay-Teile tragen kaum Biegelast über die Wand',
+                'tip.infillKeep': 'bei {v}% belassen',
+                'tip.alreadyCheap': 'bereits sparsam',
+                'tip.deeperOnlyWalls': 'tiefer lohnt nur mit mehr Wand',
+                'tip.fillHalf': 'Füllmasse halbiert',
+                'tip.adaptiveSelf': 'adaptives Infill verdichtet wandnah von selbst',
+                'tip.skinCut': 'Hautvolumen -25%',
+                'tip.skinWhy': 'Tragfläche braucht keine 4+ Lagen',
+                'tip.patternCore': 'tiefste Dichte im Kern',
+                'tip.patternWhy': 'für reine Optik-/Trageteile',
+                'tip.stiffOver': 'Biegesteifigkeit steigt überproportional',
+                'tip.wallCarries': 'Wand trägt mehr als Infill',
+                'tip.printShear': 'Druck-/Scherfestigkeit',
+                'tip.gyroidIso': 'gyroid isotroper als grid',
+                'tip.loadXY': 'Last in XY legen',
+                'tip.tensionZ': 'Zugfestigkeit Z nur ~50%',
+                'tip.layerWeak': 'Schichtverbund ist die Schwachstelle',
+                'tip.timeSave': 'Zeit -30%',
+                'tip.nozzleOk': 'bei 0.4er Düse unkritisch für Optikteile',
+                'tip.perimThird': 'Umfangwege -1/3',
+                'tip.biggestLever': 'grösster Zeithebel nach Infill',
+                'tip.fillHalve': 'Füllwege halbiert',
+                'tip.coreAdaptive': 'Kern füllt adaptiv nach',
+                'tip.topPlus': 'lückenlose Decke',
+                'tip.ironingOpt': 'Bügeln (ironing) optional dazu',
+                'tip.thinContour': 'feinere Kontur',
+                'tip.smoothLine': 'dünne Aussenlinie glättet',
+                'tip.supportsDeck': 'stützt Decke',
+                'tip.noSinking': 'verhindert Einfallstellen',
+                'tip.fit': 'Passung',
+                'tip.holesShrink': 'Bohrungen schrumpfen stärker',
+                'tip.checkFlow': ' prüfen',
+                'tip.massNoGuess': 'Mass ohne Raten',
+                'tip.cubeFirst': 'erst Kalibrierwürfel, dann Bauteil',
+                'tip.goodCompromise': 'guter Kompromiss',
+                'tip.stiffNoMass': 'Steifigkeit ohne viel Masse',
+                'tip.balance': 'Balance',
+                'tip.isoSkin': 'isotrop + stützt Haut',
+                'tip.infill': 'Infill',
+                'tip.pattern': 'Muster',
+                'tip.orientation': 'Orientierung',
+                'tip.layerHeight': 'Schichthöhe',
+                'tip.topLayers': 'Deckschichten',
+                'tip.bottomLayers': 'Bodenschichten',
+                'tip.outerWall': 'Aussenwand',
+                'tip.shrinkage': 'Schwindung',
+                'tip.flowCal': 'Flow/Kalibrierung',
+                'tip.topPlus1': 'Top +1 Lage',
+                'tip.outerThin': '0.42 -> 0.35-0.4 mm + moderate Speed',
+                'tip.shrinkVals': 'PLA: Kontur -0.1-0.2% bzw. Loch +0.2 mm',
+                'tip.flowPrefix': 'Flow ',
+                'ai.unknown': 'unbekannt',
+                'ai.pGoalLine': 'Ziel: {z} | Datei: {d} | Platte: {p}',
+                'ai.pGeo': 'Geometrie: DruckVol {v}cm3, Oberfl {o}cm2, N={n}',
+                'ai.pSlicer': 'Slicer: Wand {w} (~{t}mm), Infill {i}% {m}',
+                'ai.pLayers': 'Top {t}/Bot {b}, Schicht {h}mm, Flow {f}',
+                'ai.pMat': 'Mat: {m} D={d} | Masse: {g} W:{w} F:{f} I:{i}',
+                'ai.pPlates': 'Platten: ',
+                'ai.pObj': 'Obj',
+                'ai.pParts': 'Teile: ',
+                'ai.pNoFile': 'k.A.',
+                'lang.de': 'Deutsch',
+                'lang.en': 'English',
+                'lang.switch': 'Sprache wechseln'
+            },
+            en: {
+                'badge.3dtools': '3D Printing Tools',
+                'header.sub': 'Analysis, multi-plate preview & weight optimization for 3MF project files',
+                'header.load': 'Load 3MF / STL',
+                'header.demo': 'Load demo',
+                'drop.title': 'Drop 3MF file here',
+                'drop.sub': 'Reads mesh components, build plates & slicer metadata',
+                'grid.title': 'Build plates in project',
+                'grid.showAll': 'Show all plates',
+                'grid.closeTitle': 'Close overview (ESC)',
+                'grid.hint': 'Click a plate to select it (like in the dropdown). ESC or closing shows the 3D view again.',
+                'grid.hintSupport': '  Note: Support material is not included (just like in the total estimate).',
+                'vp.resetCam': 'Reset camera',
+                'vp.wireframe': 'Toggle wireframe',
+                'vp.bbox': 'Show bounding box',
+                'vp.axes': 'Axes display (X/Y/Z)',
+                'vp.autoRotate': 'Auto-rotation',
+                'tb.plate': 'Build plate:',
+                'tb.focusTitle': 'Focus the selected build plate',
+                'tb.focus': 'Focus',
+                'tb.gridTitle': 'Build plate overview (grid)',
+                'tb.grid': 'Overview',
+                'tb.splitTitle': 'Detect spatially separated build plates automatically',
+                'tb.split': 'Auto plates (spatial)',
+                'dim.label': 'Dimensions:',
+                'dim.x': 'Width (X)',
+                'dim.y': 'Depth (Y)',
+                'dim.z': 'Height (Z)',
+                'tab.analysis': 'Analysis',
+                'tab.all': 'All',
+                'tab.weight': 'Weight',
+                'tab.ai': 'AI Tips',
+                'file.none': 'No file loaded',
+                'file.hint': 'Drag a .3mf file here',
+                'st.volume': 'Printed volume (estimate)',
+                'st.surface': 'Surface area',
+                'st.triangles': 'Triangles (polygons)',
+                'st.objects': 'Parts / objects',
+                'thumb.title': 'Embedded slicer preview',
+                'thumb.all': 'All build plates',
+                'thumb.alt': '3MF thumbnail',
+                'parts.inSel': 'Parts in selection',
+                'parts.none': 'No parts loaded',
+                'opt.info': 'Simulate filament weight based on wall thickness, infill pattern and density.',
+                'opt.material': 'Filament material',
+                'opt.pla': 'PLA (default ~1.24 g/cm³)',
+                'opt.walls': 'Number of wall loops (perimeters)',
+                'opt.layers': 'Top/bottom shell layers',
+                'opt.infill': 'Infill density (fill)',
+                'mass.calcTitle': 'Calculated weight',
+                'mass.for': 'Filament needed for',
+                'mass.allPlates': 'All build plates',
+                'mass.est': 'Estimated weight',
+                'mass.ofWhichInfill': 'Of which infill',
+                'mass.wallsAndSkins': 'Walls & skins',
+                'mass.infill': 'Infill (fill)',
+                'mass.walls': 'Walls (perimeters)',
+                'mass.solid': 'Solid material',
+                'mass.brim': 'Brim',
+                'mass.filLen': 'Filament length (estimated)',
+                'ai.title': 'AI analysis for 3D printing & cosplay',
+                'ai.desc': 'Real AI analysis (Kilo Gateway, free models, no login/API key) based on your geometry, slicer and mass data. Pick a goal and the AI generates concrete slicer recommendations.',
+                'ai.goal': 'Optimization goal (preference)',
+                'ai.goal.balance': 'Balance (save weight, keep stability)',
+                'ai.goal.stabilitaet': 'Maximize stability',
+                'ai.goal.gewicht': 'Reduce weight',
+                'ai.goal.material': 'Save material',
+                'ai.goal.druckzeit': 'Reduce print time',
+                'ai.goal.oberflaeche': 'Surface quality',
+                'ai.goal.masshalt': 'Dimensional accuracy',
+                'ai.goal.cosplay': 'Cosplay / wearable part (light + sandable)',
+                'ai.goal.funktional': 'Functional part (load-bearing)',
+                'ai.goal.optisch': 'Optical part (show piece)',
+                'ai.model': 'AI model',
+                'ai.modelAuto': 'kilo-auto/free (Auto, recommended)',
+                'ai.length': 'Response length',
+                'ai.tokShort': 'Short (~1k tokens)',
+                'ai.tokStd': 'Standard (~1.5k)',
+                'ai.tokLong': 'Detailed (~3k)',
+                'ai.generate': 'Generate slicer recommendations',
+                'ai.copyTitle': 'Copy the finished AI prompt to the clipboard (for ChatGPT/Claude/Kilo)',
+                'ai.copy': 'Copy prompt',
+                'ai.stopTitle': 'Cancel request',
+                'ai.stop': 'Stop',
+                'ai.localNote': 'Local estimate from your geometry, slicer and mass data — no server involved. <b>Copy prompt</b> transfers all numbers to ChatGPT/Claude/Kilo for a detailed analysis. When the page is opened via http(s), the button also attempts an anonymous Kilo direct query (:free models).',
+                'ai.initial': 'Click the button above to start a geometry-based analysis.',
+                'toast.invalidFile': 'Please upload a valid .3mf or .stl file.',
+                'toast.3mfPlates': '3MF model with build plate structure loaded!',
+                'toast.3mf': '3MF model loaded!',
+                'toast.noObjects': 'No valid 3D objects found in the 3MF file.',
+                'toast.3mfErr': 'Could not read the 3MF container.',
+                'toast.stl': 'STL file loaded successfully!',
+                'toast.stlErr': 'Error while processing the STL file.',
+                'toast.notEnough': 'There are not enough parts to split into plates.',
+                'toast.split': 'Parts split across {n} build plates!',
+                'toast.demo': 'Demo project with 3 build plates loaded!',
+                'file.details': '{mb} MB • .{ext} file',
+                'opt.fromProject': 'from project',
+                'plate.allWithParts': 'All build plates ({n} parts)',
+                'plate.allInitial': 'All build plates (0 parts)',
+                'plate.withParts': '{id} ({n} part{p})',
+                'plate.partsCount': '{n} part(s)',
+                'plate.selected': '· selected',
+                'plate.allLabel': 'All build plates',
+                'plate.all': 'All',
+                'plate.pre': 'Druckplatte ',
+                'plate.plate': 'Plate ',
+                'comp.empty': 'No parts selected',
+                'comp.part': 'Part ',
+                'comp.negPrefix': 'Negative-',
+                'comp.negative': '(negative)',
+                'mass.calc': 'calculating …',
+                'mass.ofProject': '% of total project',
+                'mass.approx': ' (approx.)',
+                'grid.sum': 'Σ all plates ≈ ',
+                'grid.calcSum': 'Calculating filament need …',
+                'grid.calcTile': 'Filament still being calculated …',
+                'grid.calcSum2': 'Filament still being calculated …',
+                'vx.voxelModel': 'Voxel model',
+                'vx.geoModel': 'Geometric model',
+                'vx.infillLine': 'Infill line {v} mm, pattern {p} (cross-section exact: line × layer - corners)',
+                'vx.skin': 'Skin top {t} mm / bottom {b} mm',
+                'vx.bed': 'Build plate {w} × {d} mm (from 3MF)',
+                'vx.bed3': 'Build plate {w} × {d} × {h} mm (from 3MF)',
+                'vx.solidUnder': 'Solid: with "{ev}" the slicer additionally fills under sloped surfaces - underestimated here by ~30-40 %',
+                'vx.supportNote': 'WARNING: Supports ({t}) including support brim are NOT included',
+                'vx.skirtNote': 'Skirt not included',
+                'vx.ironingNote': 'Ironing not included',
+                'demo.details': '4.2 MB • Multi-Plate 3MF Demo',
+                'demo.helmet': 'Main helmet shell',
+                'demo.visor': 'Visor reinforcement',
+                'demo.hornL': 'Attach horn left',
+                'demo.hornR': 'Attach horn right',
+                'demo.ringA': 'Connector ring A',
+                'demo.ringB': 'Connector ring B',
+                'prompt.copied': 'Prompt copied ({n} chars) - paste into ChatGPT/Claude/Kilo.',
+                'prompt.copiedFallback': 'Prompt copied (fallback) - paste into ChatGPT/Claude/Kilo.',
+                'ai.sys': 'You are a slicer expert (Bambu, Orca, FDM). Reply in English, compact.',
+                'ai.task': 'Task: max 6 changes (param old-new + effect), 1 sentence conclusion.',
+                'ai.taskHead': 'TASK:',
+                'ai.sysHead': 'SYSTEM:',
+                'ai.asking': 'Asking AI ({m}) for goal ...',
+                'ai.recommend': 'AI recommendation ({m})',
+                'ai.basisMass': 'Basis: mass {g} | anonymous via Kilo Gateway (:free).',
+                'ai.fileHint': 'Note: file:// mode - direct query blocked by the browser (CORS). Use <b>Copy prompt</b>.',
+                'ai.aborted': 'Canceled.',
+                'ai.gatewayHint': 'Note: AI gateway unreachable ({e}). Local estimate + <b>Copy prompt</b> for ChatGPT/Claude/Kilo.',
+                'ai.localAssess': 'Local assessment: ',
+                'ai.basis': 'Basis: ',
+                'ai.bWand': 'Wall ',
+                'ai.bFest': 'Solid ',
+                'ai.bFill': 'Infill ',
+                'ai.bPart': 'Part ',
+                'ai.parts': ' parts, ',
+                'ai.tipNote': 'Tip: <b>Copy prompt</b> transfers all numbers to ChatGPT/Claude/Kilo for a detailed analysis.',
+                'vx.reading': 'Voxel analysis: reading project ...',
+                'vx.obj': 'Voxel analysis: object {id} ({i}/{n})',
+                'vx.objLayer': 'Voxel analysis: object {id} layer {p}%',
+                'vx.done': 'Voxel analysis done ({n} objects)',
+                'vx.error': 'Voxel analysis: {e}',
+                'tip.wallLines': 'Wall loops',
+                'tip.keep2': 'keep at 2',
+                'tip.minSanding': 'minimum for sandability',
+                'tip.wallBreak': '1 wall loop cracks when sanding',
+                'tip.wallVolDown': 'wall volume drops ~1/3',
+                'tip.wallWhyThin': 'thin-walled cosplay parts carry almost no bending load via the wall',
+                'tip.infillKeep': 'keep at {v}%',
+                'tip.alreadyCheap': 'already lean',
+                'tip.deeperOnlyWalls': 'going lower only pays off with more walls',
+                'tip.fillHalf': 'fill mass halved',
+                'tip.adaptiveSelf': 'adaptive infill densifies near the walls by itself',
+                'tip.skinCut': 'skin volume -25%',
+                'tip.skinWhy': 'surface needs no 4+ layers',
+                'tip.patternCore': 'lowest density in the core',
+                'tip.patternWhy': 'for purely optical/load parts',
+                'tip.stiffOver': 'bending stiffness rises disproportionately',
+                'tip.wallCarries': 'wall carries more than infill',
+                'tip.printShear': 'print/shear strength',
+                'tip.gyroidIso': 'gyroid more isotropic than grid',
+                'tip.loadXY': 'put load in XY',
+                'tip.tensionZ': 'Z tensile strength only ~50%',
+                'tip.layerWeak': 'layer bond is the weak point',
+                'tip.timeSave': 'time -30%',
+                'tip.nozzleOk': 'uncritical for optical parts with a 0.4 nozzle',
+                'tip.perimThird': 'perimeter passes -1/3',
+                'tip.biggestLever': 'biggest time lever after infill',
+                'tip.fillHalve': 'fill passes halved',
+                'tip.coreAdaptive': 'core fills adaptively',
+                'tip.topPlus': 'seamless top',
+                'tip.ironingOpt': 'ironing optional on top',
+                'tip.thinContour': 'finer contour',
+                'tip.smoothLine': 'thin outer line smooths',
+                'tip.supportsDeck': 'supports the top',
+                'tip.noSinking': 'prevents sink marks',
+                'tip.fit': 'fit',
+                'tip.holesShrink': 'holes shrink more',
+                'tip.checkFlow': ' check',
+                'tip.massNoGuess': 'mass without guessing',
+                'tip.cubeFirst': 'calibration cube first, then the part',
+                'tip.goodCompromise': 'good compromise',
+                'tip.stiffNoMass': 'stiffness without much mass',
+                'tip.balance': 'Balance',
+                'tip.isoSkin': 'isotropic + supports skin',
+                'tip.infill': 'Infill',
+                'tip.pattern': 'Pattern',
+                'tip.orientation': 'Orientation',
+                'tip.layerHeight': 'Layer height',
+                'tip.topLayers': 'Top layers',
+                'tip.bottomLayers': 'Bottom layers',
+                'tip.outerWall': 'Outer wall',
+                'tip.shrinkage': 'Shrinkage',
+                'tip.flowCal': 'Flow/calibration',
+                'tip.topPlus1': 'Top +1 layer',
+                'tip.outerThin': '0.42 -> 0.35-0.4 mm + moderate speed',
+                'tip.shrinkVals': 'PLA: contour -0.1-0.2% / holes +0.2 mm',
+                'tip.flowPrefix': 'Flow ',
+                'ai.unknown': 'unknown',
+                'ai.pGoalLine': 'Goal: {z} | file: {d} | plate: {p}',
+                'ai.pGeo': 'Geometry: printVol {v}cm3, surface {o}cm2, N={n}',
+                'ai.pSlicer': 'Slicer: walls {w} (~{t}mm), infill {i}% {m}',
+                'ai.pLayers': 'Top {t}/bottom {b}, layer {h}mm, flow {f}',
+                'ai.pMat': 'Mat: {m} D={d} | mass: {g} W:{w} S:{f} I:{i}',
+                'ai.pPlates': 'Plates: ',
+                'ai.pObj': 'pcs',
+                'ai.pParts': 'Parts: ',
+                'ai.pNoFile': 'n/a',
+                'lang.de': 'Deutsch',
+                'lang.en': 'English',
+                'lang.switch': 'Switch language'
+            }
+        };
+        (function () {
+            var STORAGE_KEY = 'i18n_lang';
+            function detectLanguage() {
+                try {
+                    var saved = window.localStorage.getItem(STORAGE_KEY);
+                    if (saved === 'de' || saved === 'en') return saved;
+                } catch (e) { /* localStorage unavailable */ }
+                var nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'de';
+                return /^de\b/i.test(nav) ? 'de' : 'en';
+            }
+            window.__I18N_CUR = detectLanguage();
+            // <html lang> fruehestmoeglich setzen (Head-Script, DOM-Element existiert).
+            try { document.documentElement.lang = window.__I18N_CUR; } catch (eLang) { }
+            window.t = function (key, params) {
+                var dict = window.__I18N[window.__I18N_CUR] || window.__I18N.de;
+                var s = dict[key];
+                if (s == null) s = (window.__I18N.de[key] != null) ? window.__I18N.de[key] : key;
+                if (params) {
+                    for (var k in params) {
+                        if (Object.prototype.hasOwnProperty.call(params, k)) {
+                            s = s.split('{' + k + '}').join(String(params[k]));
+                        }
+                    }
+                }
+                return s;
+            };
+            // Statische HTML-Texte: data-i18n (textContent), data-i18n-html (innerHTML),
+            // data-i18n-title (title-Attribut), data-i18n-alt (alt-Attribut).
+            window.applyStaticI18n = function () {
+                document.documentElement.lang = window.__I18N_CUR;
+                document.querySelectorAll('[data-i18n]').forEach(function (el) {
+                    el.textContent = t(el.getAttribute('data-i18n'));
+                });
+                document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+                    el.innerHTML = t(el.getAttribute('data-i18n-html'));
+                });
+                document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+                    el.setAttribute('title', t(el.getAttribute('data-i18n-title')));
+                });
+                document.querySelectorAll('[data-i18n-alt]').forEach(function (el) {
+                    el.setAttribute('alt', t(el.getAttribute('data-i18n-alt')));
+                });
+            };
+            // Sprache umschalten (Toggle im Header, Merker in localStorage).
+            window.setLanguage = function (lang) {
+                if (lang !== 'de' && lang !== 'en') return;
+                window.__I18N_CUR = lang;
+                try { window.localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* ignore */ }
+                window.applyStaticI18n();
+                try {
+                    if (typeof window.applyDynamicI18n === 'function') window.applyDynamicI18n();
+                } catch (e) { console.warn('i18n dynamic re-render:', e); }
+                document.querySelectorAll('[data-lang-btn]').forEach(function (b) {
+                    var active = b.getAttribute('data-lang-btn') === lang;
+                    b.classList.toggle('bg-cyan-600', active);
+                    b.classList.toggle('text-white', active);
+                    b.classList.toggle('bg-slate-800', !active);
+                    b.classList.toggle('text-slate-300', !active);
+                });
+            };
+        })();
+    </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -80,22 +606,26 @@
             <div>
                 <h1 class="font-bold text-sm sm:text-base text-slate-100 flex items-center gap-2">
                     3MF Inspector & Mesh Analyzer
-                    <span class="text-xs font-normal px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800">3D-Druck Tools</span>
+                    <span class="text-xs font-normal px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800" data-i18n="badge.3dtools">3D-Druck Tools</span>
                 </h1>
-                <p class="text-xs text-slate-400 hidden sm:block">Analyse, Multi-Plate Vorschau & Gewichtsoptimierung für 3MF-Projektdateien</p>
+                <p class="text-xs text-slate-400 hidden sm:block" data-i18n="header.sub">Analyse, Multi-Plate Vorschau & Gewichtsoptimierung für 3MF-Projektdateien</p>
             </div>
         </div>
 
         <div class="flex items-center gap-2">
+            <div class="flex items-center rounded-lg border border-slate-700 overflow-hidden" title="Sprache / Language">
+                <button type="button" data-lang-btn="de" onclick="setLanguage('de')" class="px-2.5 py-2 text-xs font-medium bg-slate-800 text-slate-300 hover:text-white transition">DE</button>
+                <button type="button" data-lang-btn="en" onclick="setLanguage('en')" class="px-2.5 py-2 text-xs font-medium bg-slate-800 text-slate-300 hover:text-white transition border-l border-slate-700">EN</button>
+            </div>
             <label for="fileInput" class="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 shadow-md shadow-blue-600/20 active:scale-95">
                 <i class="fa-solid fa-folder-open"></i>
-                <span>3MF / STL Laden</span>
+                <span data-i18n="header.load">3MF / STL Laden</span>
             </label>
             <input type="file" id="fileInput" accept=".3mf,.stl" class="hidden">
 
             <button id="demoBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-2 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
                 <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-                <span class="hidden md:inline">Demo laden</span>
+                <span class="hidden md:inline" data-i18n="header.demo">Demo laden</span>
             </button>
         </div>
     </header>
@@ -107,8 +637,8 @@
         <div id="dropZone" class="absolute inset-0 bg-blue-950/80 backdrop-blur-md border-2 border-dashed border-cyan-400 z-50 flex flex-col items-center justify-center transition-all opacity-0 pointer-events-none">
             <div class="bg-slate-900 p-6 rounded-2xl border border-cyan-500/50 shadow-2xl text-center max-w-md mx-4">
                 <i class="fa-solid fa-file-arrow-up text-5xl text-cyan-400 mb-3 animate-bounce"></i>
-                <h3 class="text-lg font-bold text-slate-100">3MF Datei hier ablegen</h3>
-                <p class="text-xs text-slate-400 mt-1">Liest Mesh-Komponenten, Druckplatten & Slicer-Metadaten aus</p>
+                <h3 class="text-lg font-bold text-slate-100" data-i18n="drop.title">3MF Datei hier ablegen</h3>
+                <p class="text-xs text-slate-400 mt-1" data-i18n="drop.sub">Liest Mesh-Komponenten, Druckplatten & Slicer-Metadaten aus</p>
             </div>
         </div>
 
@@ -124,20 +654,20 @@
                         <div class="flex items-center justify-between mb-4 gap-4 flex-wrap">
                             <h3 class="text-slate-100 font-bold flex items-center gap-2">
                                 <i class="fa-solid fa-layer-group text-cyan-400"></i>
-                                <span>Druckplatten im Projekt</span>
+                                <span data-i18n="grid.title">Druckplatten im Projekt</span>
                                 <span id="plateGridTotal" class="text-xs text-cyan-300 font-mono font-normal ml-2"></span>
                             </h3>
                             <div class="flex items-center gap-2">
                                 <button id="btnPlateGridAll" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-300 text-xs px-3 py-1.5 rounded-lg border border-cyan-800/80 transition flex items-center gap-1.5 active:scale-95">
-                                    <i class="fa-solid fa-cubes"></i><span>Alle Platten anzeigen</span>
+                                    <i class="fa-solid fa-cubes"></i><span data-i18n="grid.showAll">Alle Platten anzeigen</span>
                                 </button>
-                                <button id="btnPlateGridClose" title="Uebersicht schliessen (ESC)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 w-8 h-8 rounded-lg border border-slate-700 transition flex items-center justify-center active:scale-95">
+                                <button id="btnPlateGridClose" data-i18n-title="grid.closeTitle" title="Übersicht schliessen (ESC)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 w-8 h-8 rounded-lg border border-slate-700 transition flex items-center justify-center active:scale-95">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
                             </div>
                         </div>
                         <div id="plateGridTiles" class="grid grid-cols-3 gap-4"></div>
-                        <p class="text-[11px] text-slate-500 mt-4">Klick auf eine Platte waehlt sie aus (wie im Dropdown). ESC oder Schliessen zeigt wieder die 3D-Ansicht.</p>
+                        <p class="text-[11px] text-slate-500 mt-4" data-i18n="grid.hint">Klick auf eine Platte waehlt sie aus (wie im Dropdown). ESC oder Schliessen zeigt wieder die 3D-Ansicht.</p>
                     </div>
                 </div>
             </div>
@@ -145,19 +675,19 @@
             <!-- Viewport Overlay Toolbar Controls -->
             <div class="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
                 <div class="glass-panel rounded-xl p-1.5 flex items-center gap-1 shadow-xl">
-                    <button id="btnResetCam" title="Kamera zurücksetzen" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+                    <button id="btnResetCam" data-i18n-title="vp.resetCam" title="Kamera zurücksetzen" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
                         <i class="fa-solid fa-arrows-to-dot"></i>
                     </button>
-                    <button id="btnWireframe" title="Wireframe umschalten" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+                    <button id="btnWireframe" data-i18n-title="vp.wireframe" title="Wireframe umschalten" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
                         <i class="fa-solid fa-border-all"></i>
                     </button>
-                    <button id="btnBBox" title="Bounding Box anzeigen" class="w-8 h-8 rounded-lg bg-cyan-950 text-cyan-400 hover:bg-cyan-900 flex items-center justify-center transition">
+                    <button id="btnBBox" data-i18n-title="vp.bbox" title="Bounding Box anzeigen" class="w-8 h-8 rounded-lg bg-cyan-950 text-cyan-400 hover:bg-cyan-900 flex items-center justify-center transition">
                         <i class="fa-solid fa-vector-square"></i>
                     </button>
-                    <button id="btnAxes" title="Achsen-Anzeige (X/Y/Z)" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+                    <button id="btnAxes" data-i18n-title="vp.axes" title="Achsen-Anzeige (X/Y/Z)" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
                         <i class="fa-solid fa-compass text-cyan-400"></i>
                     </button>
-                    <button id="btnAutoRotate" title="Auto-Rotation" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+                    <button id="btnAutoRotate" data-i18n-title="vp.autoRotate" title="Auto-Rotation" class="w-8 h-8 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
                         <i class="fa-solid fa-rotate"></i>
                     </button>
                 </div>
@@ -166,27 +696,27 @@
                 <div class="glass-panel rounded-xl p-1.5 flex items-center gap-2 shadow-xl">
                     <div class="flex items-center gap-1.5 px-2 text-xs text-slate-300">
                         <i class="fa-solid fa-layer-group text-cyan-400"></i>
-                        <span class="hidden sm:inline font-medium">Druckplatte:</span>
+                        <span class="hidden sm:inline font-medium" data-i18n="tb.plate">Druckplatte:</span>
                     </div>
                     
                     <!-- Custom Styled Dropdown Select -->
                     <select id="plateSelect" class="bg-slate-950 text-cyan-300 text-xs rounded-lg border border-slate-700 px-3 py-1.5 focus:outline-none focus:border-cyan-500 font-medium cursor-pointer shadow-inner">
-                        <option value="all">Alle Druckplatten (0 Bauteile)</option>
+                        <option value="all" data-i18n="plate.allInitial">Alle Druckplatten (0 Bauteile)</option>
                     </select>
                     
-                    <button id="btnFocusSlicer" title="Fokussiert die gewählte Druckplatte" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-300 text-xs px-2.5 py-1.5 rounded-lg border border-cyan-800/80 transition flex items-center gap-1.5 active:scale-95">
+                    <button id="btnFocusSlicer" data-i18n-title="tb.focusTitle" title="Fokussiert die gewählte Druckplatte" class="bg-cyan-950 hover:bg-cyan-900 text-cyan-300 text-xs px-2.5 py-1.5 rounded-lg border border-cyan-800/80 transition flex items-center gap-1.5 active:scale-95">
                         <i class="fa-solid fa-crosshairs text-cyan-400"></i>
-                        <span class="hidden sm:inline font-medium">Fokussieren</span>
+                        <span class="hidden sm:inline font-medium" data-i18n="tb.focus">Fokussieren</span>
                     </button>
 
-                    <button id="btnPlateGrid" title="Druckplatten-Uebersicht (Raster)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5 active:scale-95">
+                    <button id="btnPlateGrid" data-i18n-title="tb.gridTitle" title="Druckplatten-Uebersicht (Raster)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5 active:scale-95">
                         <i class="fa-solid fa-table-cells-large text-cyan-400"></i>
-                        <span class="hidden sm:inline font-medium">Übersicht</span>
+                        <span class="hidden sm:inline font-medium" data-i18n="tb.grid">Übersicht</span>
                     </button>
 
-                    <button id="btnSplitPlates" title="Erkennt räumlich getrennte Druckplatten automatisch" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5 active:scale-95">
+                    <button id="btnSplitPlates" data-i18n-title="tb.splitTitle" title="Erkennt räumlich getrennte Druckplatten automatisch" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5 active:scale-95">
                         <i class="fa-solid fa-diagram-project text-amber-400"></i>
-                        <span class="hidden sm:inline font-medium">Auto-Platten (Räumlich)</span>
+                        <span class="hidden sm:inline font-medium" data-i18n="tb.split">Auto-Platten (Räumlich)</span>
                     </button>
                 </div>
             </div>
@@ -195,12 +725,12 @@
             <div id="dimBanner" class="absolute bottom-4 left-4 right-4 md:right-auto glass-panel rounded-xl p-3 z-10 flex items-center justify-between md:justify-start gap-4 text-xs">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-ruler-combined text-cyan-400"></i>
-                    <span class="text-slate-400">Abmessungen:</span>
+                    <span class="text-slate-400" data-i18n="dim.label">Abmessungen:</span>
                 </div>
                 <div class="flex items-center gap-3 font-mono font-medium text-slate-200">
-                    <span title="Breite (X)"><span class="text-red-400">X:</span> <span id="dimX">0</span> mm</span>
-                    <span title="Tiefe (Y)"><span class="text-green-400">Y:</span> <span id="dimY">0</span> mm</span>
-                    <span title="Höhe (Z)"><span class="text-blue-400">Z:</span> <span id="dimZ">0</span> mm</span>
+                    <span data-i18n-title="dim.x" title="Breite (X)"><span class="text-red-400">X:</span> <span id="dimX">0</span> mm</span>
+                    <span data-i18n-title="dim.y" title="Tiefe (Y)"><span class="text-green-400">Y:</span> <span id="dimY">0</span> mm</span>
+                    <span data-i18n-title="dim.z" title="Höhe (Z)"><span class="text-blue-400">Z:</span> <span id="dimZ">0</span> mm</span>
                 </div>
             </div>
         </div>
@@ -212,16 +742,16 @@
             <div class="flex border-b border-slate-800 bg-slate-950/50 text-xs font-medium">
                 <button id="tabOverviewBtn" class="flex-1 py-3 border-b-2 border-cyan-500 text-cyan-400 font-semibold flex items-center justify-center gap-2">
                     <i class="fa-solid fa-circle-info"></i>
-                    <span>Analyse</span>
-                    <span id="analysePlateBadge" class="text-[10px] bg-slate-800 text-cyan-300 px-1.5 py-0.25 rounded">Alle</span>
+                    <span data-i18n="tab.analysis">Analyse</span>
+                    <span id="analysePlateBadge" class="text-[10px] bg-slate-800 text-cyan-300 px-1.5 py-0.25 rounded" data-i18n="tab.all">Alle</span>
                 </button>
                 <button id="tabOptimizerBtn" class="flex-1 py-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-weight-hanging"></i>
-                    <span>Gewicht</span>
+                    <span data-i18n="tab.weight">Gewicht</span>
                 </button>
                 <button id="tabAIBtn" class="flex-1 py-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-microchip"></i>
-                    <span>KI-Tipps</span>
+                    <span data-i18n="tab.ai">KI-Tipps</span>
                 </button>
             </div>
 
@@ -236,27 +766,27 @@
                             <i class="fa-solid fa-file-zipper text-lg"></i>
                         </div>
                         <div class="overflow-hidden flex-1">
-                            <h3 id="fileName" class="font-bold text-sm text-slate-100 truncate">Keine Datei geladen</h3>
-                            <p id="fileDetails" class="text-xs text-slate-400 mt-0.5">Ziehe eine .3mf Datei hierher</p>
+                            <h3 id="fileName" class="font-bold text-sm text-slate-100 truncate" data-i18n="file.none">Keine Datei geladen</h3>
+                            <p id="fileDetails" class="text-xs text-slate-400 mt-0.5" data-i18n="file.hint">Ziehe eine .3mf Datei hierher</p>
                         </div>
                     </div>
 
                     <!-- Statistics Matrix -->
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-                            <span class="text-slate-400 block mb-1">Gedrucktes Volumen (Schätzung)</span>
+                            <span class="text-slate-400 block mb-1" data-i18n="st.volume">Gedrucktes Volumen (Schätzung)</span>
                             <span id="statVolume" class="text-base font-bold text-cyan-400 font-mono">0.00 cm³</span>
                         </div>
                         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-                            <span class="text-slate-400 block mb-1">Oberfläche</span>
+                            <span class="text-slate-400 block mb-1" data-i18n="st.surface">Oberfläche</span>
                             <span id="statSurface" class="text-base font-bold text-slate-200 font-mono">0.00 cm²</span>
                         </div>
                         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-                            <span class="text-slate-400 block mb-1">Dreiecke (Polygone)</span>
+                            <span class="text-slate-400 block mb-1" data-i18n="st.triangles">Dreiecke (Polygone)</span>
                             <span id="statTriangles" class="text-base font-bold text-slate-200 font-mono">0</span>
                         </div>
                         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-                            <span class="text-slate-400 block mb-1">Bauteile / Objekte</span>
+                            <span class="text-slate-400 block mb-1" data-i18n="st.objects">Bauteile / Objekte</span>
                             <span id="statObjects" class="text-base font-bold text-slate-200 font-mono">0</span>
                         </div>
                     </div>
@@ -264,22 +794,22 @@
                     <!-- Embedded Slicer Preview Thumbnail -->
                     <div id="thumbnailContainer" class="hidden space-y-2">
                         <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-                            <span>Eingebettete Slicer-Vorschau</span>
-                            <span id="thumbnailCaption" class="text-cyan-300 font-medium">Alle Druckplatten</span>
+                            <span data-i18n="thumb.title">Eingebettete Slicer-Vorschau</span>
+                            <span id="thumbnailCaption" class="text-cyan-300 font-medium" data-i18n="thumb.all">Alle Druckplatten</span>
                         </h4>
                         <div class="bg-slate-950 p-2 rounded-xl border border-slate-800 flex items-center justify-center min-h-[120px]">
-                            <img id="extractedThumbnail" src="" alt="3MF Thumbnail" class="max-h-40 rounded-lg object-contain">
+                            <img id="extractedThumbnail" src="" data-i18n-alt="thumb.alt" alt="3MF Thumbnail" class="max-h-40 rounded-lg object-contain">
                         </div>
                     </div>
 
                     <!-- Extracted 3MF Components list -->
                     <div class="space-y-2">
                         <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-                            <span>Bauteile in der Auswahl</span>
+                            <span data-i18n="parts.inSel">Bauteile in der Auswahl</span>
                             <span id="objectCountBadge" class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded text-[10px]">0</span>
                         </h4>
                         <div id="componentList" class="bg-slate-950 rounded-xl border border-slate-800 divide-y divide-slate-800/60 max-h-48 overflow-y-auto">
-                            <div class="p-3 text-xs text-slate-500 text-center italic">Keine Bauteile geladen</div>
+                            <div class="p-3 text-xs text-slate-500 text-center italic" data-i18n="parts.none">Keine Bauteile geladen</div>
                         </div>
                     </div>
                 </div>
@@ -288,17 +818,17 @@
                 <div id="tabOptimizer" class="hidden space-y-4">
                     <div class="bg-blue-950/40 border border-blue-800/50 rounded-xl p-3 text-xs text-blue-200 flex gap-2">
                         <i class="fa-solid fa-circle-info text-blue-400 shrink-0 mt-0.5"></i>
-                        <p>Simuliere Filamentgewicht basierend auf Wandstärke, Infill-Muster und Dichte.</p>
+                        <p data-i18n="opt.info">Simuliere Filamentgewicht basierend auf Wandstärke, Infill-Muster und Dichte.</p>
                     </div>
 
                     <!-- Material Selector -->
                     <div class="space-y-1.5">
                         <label class="text-xs text-slate-400 font-medium flex justify-between">
-                            <span>Filament-Material</span>
+                            <span data-i18n="opt.material">Filament-Material</span>
                             <span id="densityVal" class="text-slate-300 font-mono">1.24 g/cm³</span>
                         </label>
                         <select id="matSelect" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                            <option value="1.24">PLA (Standard ~1.24 g/cm³)</option>
+                            <option value="1.24" data-i18n="opt.pla">PLA (Standard ~1.24 g/cm³)</option>
                             <option value="1.27">PETG (~1.27 g/cm³)</option>
                             <option value="1.04">ABS / ASA (~1.04 g/cm³)</option>
                             <option value="1.22">TPU / Flex (~1.22 g/cm³)</option>
@@ -309,7 +839,7 @@
                     <!-- Wall Loops / Shell Count -->
                     <div class="space-y-1.5">
                         <div class="flex justify-between text-xs">
-                            <span class="text-slate-400">Anzahl Wandlinien (Perimeter)</span>
+                            <span class="text-slate-400" data-i18n="opt.walls">Anzahl Wandlinien (Perimeter)</span>
                             <span id="wallCountVal" class="text-cyan-400 font-bold font-mono">3 (1.2 mm)</span>
                         </div>
                         <input type="range" id="wallSlider" min="2" max="8" value="3" class="w-full accent-cyan-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer">
@@ -318,7 +848,7 @@
                     <!-- Top/Bottom Layers -->
                     <div class="space-y-1.5">
                         <div class="flex justify-between text-xs">
-                            <span class="text-slate-400">Obere/Untere Deckschichten</span>
+                            <span class="text-slate-400" data-i18n="opt.layers">Obere/Untere Deckschichten</span>
                             <span id="layerCountVal" class="text-slate-200 font-mono">4 Top / 3 Bottom</span>
                         </div>
                         <input type="range" id="layerSlider" min="2" max="6" value="4" class="w-full accent-cyan-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer">
@@ -327,7 +857,7 @@
                     <!-- Infill Percentage Slider -->
                     <div class="space-y-1.5">
                         <div class="flex justify-between text-xs">
-                            <span class="text-slate-400">Infill-Dichte (Füllung)</span>
+                            <span class="text-slate-400" data-i18n="opt.infill">Infill-Dichte (Füllung)</span>
                             <span id="infillVal" class="text-cyan-400 font-bold font-mono">10 %</span>
                         </div>
                         <input type="range" id="infillSlider" min="0" max="100" value="10" step="1" class="w-full accent-cyan-500 bg-slate-800 rounded-lg h-1.5 cursor-pointer">
@@ -336,23 +866,23 @@
                     <!-- Calculated Mass Comparison Card -->
                     <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
                         <h4 class="text-xs font-semibold text-slate-300 flex items-center justify-between">
-                            <span>Berechnetes Gewicht</span>
+                            <span data-i18n="mass.calcTitle">Berechnetes Gewicht</span>
                             <i class="fa-solid fa-scale-balanced text-cyan-400"></i>
                         </h4>
 
                         <!-- Vorrang-Anzeige: gilt immer fuer die aktuell gewaehlte Druckplatte -->
                         <div class="flex items-center justify-between gap-2 text-xs bg-slate-900/60 rounded-lg px-2.5 py-1.5 border border-slate-800">
-                            <span class="text-slate-400">Filamentbedarf für</span>
-                            <span id="massScope" class="font-semibold text-cyan-300 truncate">Alle Druckplatten</span>
+                            <span class="text-slate-400" data-i18n="mass.for">Filamentbedarf für</span>
+                            <span id="massScope" class="font-semibold text-cyan-300 truncate" data-i18n="mass.allPlates">Alle Druckplatten</span>
                         </div>
 
                         <div class="flex items-baseline justify-between">
                             <div>
-                                <span class="text-xs text-slate-400 block">Geschätztes Gewicht</span>
+                                <span class="text-xs text-slate-400 block" data-i18n="mass.est">Geschätztes Gewicht</span>
                                 <span id="estMass" class="text-2xl font-extrabold text-cyan-400 font-mono">0.0 g</span>
                             </div>
                             <div class="text-right">
-                                <span class="text-xs text-slate-400 block">Davon Infill</span>
+                                <span class="text-xs text-slate-400 block" data-i18n="mass.ofWhichInfill">Davon Infill</span>
                                 <span id="estInfillMass" class="text-sm font-semibold text-slate-300 font-mono">0.0 g</span>
                             </div>
                         </div>
@@ -363,18 +893,18 @@
                             <div id="barInfill" class="bg-amber-500 h-full transition-all" style="width: 30%"></div>
                         </div>
                         <div class="flex justify-between text-[10px] text-slate-400 font-mono">
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-500 inline-block"></span> Wände & Decken</span>
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> Füllung (Infill)</span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-500 inline-block"></span> <span data-i18n="mass.wallsAndSkins">Wände & Decken</span></span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> <span data-i18n="mass.infill">Füllung (Infill)</span></span>
                         </div>
                         <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] pt-1">
-                            <div class="flex items-baseline justify-between"><span class="text-slate-400">Wände (Perimeter)</span><span id="massWalls" class="font-mono text-slate-200">– g</span></div>
-                            <div class="flex items-baseline justify-between"><span class="text-slate-400">Festmaterial</span><span id="massSkin" class="font-mono text-slate-200">– g</span></div>
-                            <div class="flex items-baseline justify-between"><span class="text-slate-400">Füllung (Infill)</span><span id="massInfill" class="font-mono text-slate-200">– g</span></div>
+                            <div class="flex items-baseline justify-between"><span class="text-slate-400" data-i18n="mass.walls">Wände (Perimeter)</span><span id="massWalls" class="font-mono text-slate-200">– g</span></div>
+                            <div class="flex items-baseline justify-between"><span class="text-slate-400" data-i18n="mass.solid">Festmaterial</span><span id="massSkin" class="font-mono text-slate-200">– g</span></div>
+                            <div class="flex items-baseline justify-between"><span class="text-slate-400" data-i18n="mass.infill">Füllung (Infill)</span><span id="massInfill" class="font-mono text-slate-200">– g</span></div>
                             <div class="flex items-baseline justify-between"><span class="text-slate-400">Brim</span><span id="massBrim" class="font-mono text-slate-200">– g</span></div>
                         </div>
 
                         <div class="flex items-baseline justify-between text-xs">
-                            <span class="text-slate-400">Filamentlänge (geschätzt)</span>
+                            <span class="text-slate-400" data-i18n="mass.filLen">Filamentlänge (geschätzt)</span>
                             <span id="massMeter" class="font-mono font-semibold text-slate-200">– m</span>
                         </div>
                         <div id="massShare" class="text-[11px] text-slate-500 text-right"></div>
@@ -394,41 +924,41 @@
                     <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
                         <div class="flex items-center gap-2 text-cyan-400 font-semibold text-xs">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
-                            <span>KI-Analyse für 3D-Druck & Cosplay</span>
+                            <span data-i18n="ai.title">KI-Analyse für 3D-Druck & Cosplay</span>
                         </div>
-                        <p class="text-xs text-slate-400">Echte KI-Analyse (Kilo Gateway, kostenlose Modelle, ohne Login/API-Key) auf Basis deiner Geometrie-, Slicer- und Massedaten. Wähle ein Ziel, dann generiert die KI konkrete Slicer-Empfehlungen.</p>
+                        <p class="text-xs text-slate-400" data-i18n="ai.desc">Echte KI-Analyse (Kilo Gateway, kostenlose Modelle, ohne Login/API-Key) auf Basis deiner Geometrie-, Slicer- und Massedaten. Wähle ein Ziel, dann generiert die KI konkrete Slicer-Empfehlungen.</p>
                         <div class="space-y-2">
                             <div>
-                                <label for="aiPrefSelect" class="text-[11px] text-slate-400 block mb-1">Optimierungsziel (Präferenz)</label>
+                                <label for="aiPrefSelect" class="text-[11px] text-slate-400 block mb-1" data-i18n="ai.goal">Optimierungsziel (Präferenz)</label>
                                 <select id="aiPrefSelect" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                                    <option value="balance">Balance / ausgewogen (Gewicht sparen, Stabilität halten)</option>
-                                    <option value="stabilitaet">Stabilität maximieren</option>
-                                    <option value="gewicht">Gewicht reduzieren</option>
-                                    <option value="material">Material sparen</option>
-                                    <option value="druckzeit">Druckzeit reduzieren</option>
-                                    <option value="oberflaeche">Oberflächenqualität</option>
-                                    <option value="masshalt">Maßhaltigkeit</option>
-                                    <option value="cosplay">Cosplay / tragbares Bauteil (leicht + schleifbar)</option>
-                                    <option value="funktional">Funktionales Bauteil (belastbar)</option>
-                                    <option value="optisch">Optisches Bauteil (Show-Teil)</option>
+                                    <option value="balance" data-i18n="ai.goal.balance">Balance / ausgewogen (Gewicht sparen, Stabilität halten)</option>
+                                    <option value="stabilitaet" data-i18n="ai.goal.stabilitaet">Stabilität maximieren</option>
+                                    <option value="gewicht" data-i18n="ai.goal.gewicht">Gewicht reduzieren</option>
+                                    <option value="material" data-i18n="ai.goal.material">Material sparen</option>
+                                    <option value="druckzeit" data-i18n="ai.goal.druckzeit">Druckzeit reduzieren</option>
+                                    <option value="oberflaeche" data-i18n="ai.goal.oberflaeche">Oberflächenqualität</option>
+                                    <option value="masshalt" data-i18n="ai.goal.masshalt">Maßhaltigkeit</option>
+                                    <option value="cosplay" data-i18n="ai.goal.cosplay">Cosplay / tragbares Bauteil (leicht + schleifbar)</option>
+                                    <option value="funktional" data-i18n="ai.goal.funktional">Funktionales Bauteil (belastbar)</option>
+                                    <option value="optisch" data-i18n="ai.goal.optisch">Optisches Bauteil (Show-Teil)</option>
                                 </select>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label for="aiModelSelect" class="text-[11px] text-slate-400 block mb-1">KI-Modell</label>
+                                    <label for="aiModelSelect" class="text-[11px] text-slate-400 block mb-1" data-i18n="ai.model">KI-Modell</label>
                                     <select id="aiModelSelect" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                                        <option value="kilo-auto/free">kilo-auto/free (Auto, empfohlen)</option>
+                                        <option value="kilo-auto/free" data-i18n="ai.modelAuto">kilo-auto/free (Auto, empfohlen)</option>
                                         <option value="openrouter/free">openrouter/free</option>
                                         <option value="minimax/minimax-m2.1:free">minimax-m2.1:free</option>
                                         <option value="z-ai/glm-5:free">z-ai/glm-5:free</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="aiTokensSelect" class="text-[11px] text-slate-400 block mb-1">Antwortlänge</label>
+                                    <label for="aiTokensSelect" class="text-[11px] text-slate-400 block mb-1" data-i18n="ai.length">Antwortlänge</label>
                                     <select id="aiTokensSelect" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                                        <option value="1024">Kurz (~1k Tokens)</option>
-                                        <option value="1536" selected>Standard (~1,5k)</option>
-                                        <option value="3072">Ausführlich (~3k)</option>
+                                        <option value="1024" data-i18n="ai.tokShort">Kurz (~1k Tokens)</option>
+                                        <option value="1536" selected data-i18n="ai.tokStd">Standard (~1,5k)</option>
+                                        <option value="3072" data-i18n="ai.tokLong">Ausführlich (~3k)</option>
                                     </select>
                                 </div>
                             </div>
@@ -436,22 +966,22 @@
                         <div class="flex gap-2 mt-2">
                             <button id="btnRunAI" class="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium text-xs py-2 px-3 rounded-lg transition shadow-md shadow-cyan-600/20 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-brain"></i>
-                                <span>Slicer-Empfehlung generieren</span>
+                                <span data-i18n="ai.generate">Slicer-Empfehlung generieren</span>
                             </button>
-                            <button id="btnCopyAI" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs py-2 px-3 rounded-lg transition border border-slate-700 flex items-center justify-center gap-2" title="Fertigen KI-Prompt in die Zwischenablage kopieren (fuer ChatGPT/Claude/Kilo)">
+                            <button id="btnCopyAI" data-i18n-title="ai.copyTitle" title="Fertigen KI-Prompt in die Zwischenablage kopieren (fuer ChatGPT/Claude/Kilo)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs py-2 px-3 rounded-lg transition border border-slate-700 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-copy"></i>
-                                <span>Prompt kopieren</span>
+                                <span data-i18n="ai.copy">Prompt kopieren</span>
                             </button>
-                            <button id="btnStopAI" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs py-2 px-3 rounded-lg transition border border-slate-700 items-center justify-center gap-2" title="Anfrage abbrechen">
+                            <button id="btnStopAI" data-i18n-title="ai.stopTitle" title="Anfrage abbrechen" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs py-2 px-3 rounded-lg transition border border-slate-700 items-center justify-center gap-2">
                                 <i class="fa-solid fa-stop"></i>
-                                <span>Stopp</span>
+                                <span data-i18n="ai.stop">Stopp</span>
                             </button>
                         </div>
-                        <p class="text-[10px] text-slate-500">Lokale Einschaetzung aus deinen Geometrie-, Slicer- und Massedaten — ganz ohne Server. <b>Prompt kopieren</b> uebertraegt alle Zahlen in ChatGPT/Claude/Kilo fuer eine ausfuehrliche Analyse. Wird die Seite ueber http(s) geoeffnet, versucht der Button zusaetzlich eine anonyme Kilo-Direktabfrage (:free-Modelle).</p>
+                        <p class="text-[10px] text-slate-500" data-i18n-html="ai.localNote">Lokale Einschaetzung aus deinen Geometrie-, Slicer- und Massedaten — ganz ohne Server. <b>Prompt kopieren</b> uebertraegt alle Zahlen in ChatGPT/Claude/Kilo fuer eine ausfuehrliche Analyse. Wird die Seite ueber http(s) geoeffnet, versucht der Button zusaetzlich eine anonyme Kilo-Direktabfrage (:free-Modelle).</p>
                     </div>
 
                     <!-- AI Output Box -->
-                    <div id="aiResultBox" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2 leading-relaxed min-h-[160px]">
+                    <div id="aiResultBox" data-i18n-html="ai.initial" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2 leading-relaxed min-h-[160px]">
                         <p class="text-slate-500 italic text-center py-6">Klicke auf den Button oben, um eine geometrie-basierte Analyse zu starten.</p>
                     </div>
                 </div>
@@ -513,6 +1043,8 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
 
         // Initialize App on DOM Load
         window.addEventListener('DOMContentLoaded', () => {
+            // i18n: statische Texte + Toggle-Zustand auf die erkannte Sprache setzen.
+            try { window.setLanguage(window.__I18N_CUR); } catch (eI18n) { try { window.applyStaticI18n(); } catch (eI18n2) { } }
             init3D();
             setupEventListeners();
             setupTabs();
@@ -736,7 +1268,9 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             const ext = name.split('.').pop().toLowerCase();
 
             document.getElementById('fileName').textContent = name;
-            document.getElementById('fileDetails').textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB • .${ext.toUpperCase()} Datei`;
+            window.__fileState = { mb: (file.size / (1024 * 1024)).toFixed(2), ext: ext.toUpperCase() };
+            window.__demoState = false;
+            document.getElementById('fileDetails').textContent = t('file.details', window.__fileState);
 
             if (ext === '3mf') {
                 resetState();
@@ -746,7 +1280,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 resetState();
                 parseSTLAndRender(file);
             } else {
-                showToast("Bitte lade eine gültige .3mf oder .stl Datei hoch.");
+                showToast(t('toast.invalidFile'));
             }
         }
 
@@ -858,7 +1392,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                     // (otherwise the first display uses the stale UI defaults until the user
                     // switches plates).
                     recalculatePlateStats();
-                    showToast("3MF-Modell mit Druckplatten-Struktur geladen!");
+                    showToast(t('toast.3mfPlates'));
                 } else {
                     // Fallback to standard Three.js 3MF loader (MFLoader in r128)
                     const reader = new FileReader();
@@ -868,10 +1402,10 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                             const object = loader.parse(e.target.result);
                             processLoadedMeshGroup(object, file.name);
                             recalculatePlateStats();
-                            showToast("3MF-Modell geladen!");
+                            showToast(t('toast.3mf'));
                         } catch(err) {
                             console.error("Standard 3MF Loader Error:", err);
-                            showToast("Keine gültigen 3D-Objekte in der 3MF-Datei gefunden.");
+                            showToast(t('toast.noObjects'));
                         }
                     };
                     reader.readAsArrayBuffer(file);
@@ -879,7 +1413,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
 
             } catch (err) {
                 console.error("3MF Parse Error:", err);
-                showToast("Konnte 3MF-Container nicht auslesen.");
+                showToast(t('toast.3mfErr'));
             }
         }
 
@@ -1033,7 +1567,8 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 if (bestDiff > 0.001 && !opts[bestIdx].value.startsWith(String(cfg.density))) {
                     let opt = opts[bestIdx];
                     opt.value = String(cfg.density);
-                    opt.textContent = `${cfg.density.toFixed(2)} g/cm³ (aus Projekt)`;
+                    opt.textContent = `${cfg.density.toFixed(2)} g/cm³ (${t('opt.fromProject')})`;
+                    window.__injectedDensity = cfg.density;
                 }
             }
             // Dichte-Label an das (ggf. aus dem Projekt injizierte) Material anpassen.
@@ -1387,10 +1922,10 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 group.add(mesh);
 
                     processLoadedMeshGroup(group, file.name);
-                    showToast("STL-Datei erfolgreich geladen!");
+                    showToast(t('toast.stl'));
                 } catch (err) {
                     console.error("STL Parse Error:", err);
-                    showToast("Fehler beim Verarbeiten der STL-Datei.");
+                    showToast(t('toast.stlErr'));
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -1442,8 +1977,12 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
 
                     const isNegative = !!child.userData.isNegative;
                     const mesh = new THREE.Mesh(geom, (isNegative ? negativeMaterial : defaultMaterial).clone());
-                    mesh.name = child.name || `${isNegative ? 'Negativ-' : '' }Bauteil #${objectIdx++}`;
+                    // Namens-Fallback wird NICHT in mesh.name geschrieben, sondern als Index
+                    // gemerkt - meshDisplayName() uebersetzt ihn beim Anzeigen (DE/EN).
+                    mesh.name = child.name || '';
+                    if (!child.name) mesh.userData.autoNameIdx = objectIdx++;
                     mesh.userData.isNegative = isNegative;
+                    if (child.userData && child.userData.demoKey) mesh.userData.demoKey = child.userData.demoKey;
 
                     const plateId = child.userData.plateId || `Druckplatte 1`;
                     mesh.userData.plateId = plateId;
@@ -1514,7 +2053,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
 
         function populatePlateSelector() {
             const select = document.getElementById('plateSelect');
-            select.innerHTML = `<option value="all">Alle Druckplatten (${currentMeshGroup.children.length} Bauteile)</option>`;
+            select.innerHTML = `<option value="all">${t('plate.allWithParts', { n: currentMeshGroup.children.length })}</option>`;
 
             // Sort plates naturally (Druckplatte 1, Druckplatte 2, etc.)
             const sortedPlates = Array.from(plateMap.keys()).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
@@ -1523,14 +2062,14 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 const meshes = plateMap.get(plateId);
                 const opt = document.createElement('option');
                 opt.value = plateId;
-                opt.textContent = `${plateId} (${meshes.length} Bauteil${meshes.length > 1 ? 'e' : ''})`;
+                opt.textContent = t('plate.withParts', { id: plateLabelDisp(plateId), n: meshes.length, p: meshes.length > 1 ? 'e' : '' });
                 select.appendChild(opt);
             });
         }
 
         function autoPartitionLooseObjectsToPlates(userTriggered = true) {
             if (!currentMeshGroup || currentMeshGroup.children.length <= 1) {
-                if (userTriggered) showToast("Es sind nicht genügend Bauteile für ein Aufteilen vorhanden.");
+                if (userTriggered) showToast(t('toast.notEnough'));
                 return;
             }
 
@@ -1659,7 +2198,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             populatePlateSelector();
 
             if (userTriggered) {
-                showToast(`Bauteile auf ${plateMap.size} Druckplatten aufgeteilt!`);
+                showToast(t('toast.split', { n: plateMap.size }));
             }
         }
 
@@ -1917,11 +2456,11 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                     '</div>' +
                     '<div class="p-2.5">' +
                     '<div class="text-xs font-semibold text-slate-100 truncate">' +
-                    escapeHtml(isAll ? 'Alle Druckplatten' : String(o.textContent).replace(/\s*\(.*$/, '')) +
+                    escapeHtml(isAll ? t('plate.allLabel') : String(o.textContent).replace(/\s*\(.*$/, '')) +
                     '</div>' +
                     '<div class="text-[11px] font-mono text-slate-500 italic" data-plate-mass="' + escapeHtml(val) + '"></div>' +
-                    '<div class="text-[11px] text-slate-400">' + (cnt ? cnt[1] + ' Bauteil(e)' : '') +
-                    (active ? ' · ausgewählt' : '') + '</div>' +
+                    '<div class="text-[11px] text-slate-400">' + (cnt ? t('plate.partsCount', { n: cnt[1] }) : '') +
+                    (active ? ' ' + t('plate.selected') : '') + '</div>' +
                     '</div>';
                 tile.addEventListener('click', function () {
                     const s = document.getElementById('plateSelect');
@@ -1936,8 +2475,8 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             // Fussnote: Stuetzmaterial ist nicht Teil der Schaetzung (siehe Tooltip am Gewicht).
             const hint = wrap.parentNode ? wrap.parentNode.querySelector('p') : null;
             if (hint) {
-                hint.textContent = 'Klick auf eine Platte wählt sie aus (wie im Dropdown). ESC oder Schließen zeigt wieder die 3D-Ansicht.'
-                    + ((slicerSettings && slicerSettings.enableSupport) ? '  Hinweis: Stützmaterial ist (wie in der Gesamtschätzung) nicht eingerechnet.' : '');
+                hint.textContent = t('grid.hint')
+                    + ((slicerSettings && slicerSettings.enableSupport) ? t('grid.hintSupport') : '');
             }
         }
 
@@ -1952,14 +2491,14 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             const tot = document.getElementById('plateGridTotal');
             if (tot) {
                 tot.textContent = masse.size > 0
-                    ? ('Σ aller Platten ≈ ' + sumG.toFixed(1) + ' g · ' + sumM.toFixed(0) + ' m')
-                    : 'Filamentbedarf wird berechnet …';
+                    ? (t('grid.sum') + sumG.toFixed(1) + ' g · ' + sumM.toFixed(0) + ' m')
+                    : t('grid.calcSum');
             }
             const els = ov.querySelectorAll('[data-plate-mass]');
             for (let i = 0; i < els.length; i++) {
                 const key = els[i].getAttribute('data-plate-mass');
                 const mp = (key === 'all') ? (masse.size ? { g: sumG, m: sumM } : null) : masse.get(key);
-                els[i].textContent = mp ? ('≈ ' + mp.g.toFixed(1) + ' g · ' + mp.m.toFixed(0) + ' m') : 'Filament wird noch berechnet …';
+                els[i].textContent = mp ? ('≈ ' + mp.g.toFixed(1) + ' g · ' + mp.m.toFixed(0) + ' m') : t('grid.calcTile');
                 els[i].className = 'text-[11px] font-mono ' + (mp ? 'text-cyan-300' : 'text-slate-500 italic');
             }
         }
@@ -2016,14 +2555,14 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
         }
 
         function activePlateLabel(plateId) {
-            if (plateId === 'all') return 'Alle Druckplatten';
-            return `${plateId} (${plateMap.get(plateId)?.length || 0} Bauteil${(plateMap.get(plateId)?.length || 0) !== 1 ? 'e' : ''})`;
+            if (plateId === 'all') return t('plate.allLabel');
+            return t('plate.withParts', { id: plateLabelDisp(plateId), n: plateMap.get(plateId)?.length || 0, p: (plateMap.get(plateId)?.length || 0) !== 1 ? 'e' : '' });
         }
 
         function updateAnalyseBadge(plateId) {
             const badge = document.getElementById('analysePlateBadge');
             if (!badge) return;
-            badge.textContent = plateId === 'all' ? 'Alle' : (plateId.replace('Druckplatte ', '#'));
+            badge.textContent = plateId === 'all' ? t('plate.all') : (plateId.replace('Druckplatte ', '#'));
         }
 
         function focusOnActivePlate() {
@@ -2130,7 +2669,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 document.getElementById('estInfillMass').textContent = '0.0 g';
                 document.getElementById('barShell').style.width = '60%';
                 document.getElementById('barInfill').style.width = '40%';
-                document.getElementById('componentList').innerHTML = '<div class="p-3 text-xs text-slate-500 text-center italic">Keine Bauteile ausgewählt</div>';
+                document.getElementById('componentList').innerHTML = `<div class="p-3 text-xs text-slate-500 text-center italic">${t('comp.empty')}</div>`;
                 document.getElementById('objectCountBadge').textContent = '0';
                 return;
             }
@@ -2197,7 +2736,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             document.getElementById('dimZ').textContent = size.z.toFixed(1);
 
             document.getElementById('statSurface').textContent = `${posSurf.toFixed(1)} cm²`;
-            document.getElementById('statTriangles').textContent = totalTris.toLocaleString('de-DE');
+            document.getElementById('statTriangles').textContent = totalTris.toLocaleString(window.__I18N_CUR === 'en' ? 'en-US' : 'de-DE');
             document.getElementById('statObjects').textContent = visibleMeshes.length;
             document.getElementById('objectCountBadge').textContent = visibleMeshes.length;
 
@@ -2213,8 +2752,8 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                     <div class="flex items-center gap-2 overflow-hidden">
                         <i class="fa-solid fa-cube ${isNeg ? 'text-rose-400' : 'text-cyan-400'} text-xs shrink-0"></i>
                         <div class="truncate">
-                            <p class="font-medium ${isNeg ? 'text-rose-300' : 'text-slate-200'} truncate">${escapeHtml(mesh.name || 'Bauteil ' + (idx + 1))}${isNeg ? ' <span class="text-rose-500">(Negativ)</span>' : ''}</p>
-                            <p class="text-[10px] text-slate-400 font-mono">${escapeHtml(mesh.userData.plateId || 'Druckplatte 1')}</p>
+                            <p class="font-medium ${isNeg ? 'text-rose-300' : 'text-slate-200'} truncate">${escapeHtml(meshDisplayName(mesh, idx))}${isNeg ? ' <span class="text-rose-500">' + t('comp.negative') + '</span>' : ''}</p>
+                            <p class="text-[10px] text-slate-400 font-mono">${escapeHtml(mesh.userData.plateId ? plateLabelDisp(mesh.userData.plateId) : plateLabelDisp('Druckplatte 1'))}</p>
                         </div>
                     </div>
                     <div class="text-right font-mono text-[11px] shrink-0 ml-2">
@@ -2433,7 +2972,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             const istAlle = (activePlateId === 'all');
             const scope = document.getElementById('massScope');
             const share = document.getElementById('massShare');
-            if (scope) scope.textContent = istAlle ? 'Alle Druckplatten' : String(activePlateLabel(activePlateId)).replace(/\s*\(.*$/, '');
+            if (scope) scope.textContent = istAlle ? t('plate.allLabel') : String(activePlateLabel(activePlateId)).replace(/\s*\(.*$/, '');
             let gesamtG = 0;
             masse.forEach(function (v) { gesamtG += v.g; });
             let e = null;
@@ -2445,7 +2984,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 e = masse.get(activePlateId) || null;
             }
             if (!e) {
-                mEl.textContent = 'wird berechnet …';
+                mEl.textContent = t('mass.calc');
                 if (share) share.textContent = '';
                 return;
             }
@@ -2456,7 +2995,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 const alleKey = ((window.__raw3mf && window.__raw3mf.fileName) || '') + '|all';
                 const gesamtVollstaendig = !!(window.__voxelEst && window.__voxelEst.cache && window.__voxelEst.cache.has(alleKey));
                 share.textContent = (!istAlle && gesamtVollstaendig && gesamtG > 0)
-                    ? ('= ' + (e.g / gesamtG * 100).toFixed(1) + ' % des Gesamtprojekts')
+                    ? ('= ' + (e.g / gesamtG * 100).toFixed(1) + ' ' + t('mass.ofProject'))
                     : '';
             }
         }
@@ -2667,7 +3206,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             // Waehrend die Voxel-Analyse laeuft, darf KEIN grobes Ersatzmodell als
             // fertiger Wert erscheinen (das geometrische Modell ueberschaetzt deutlich).
             const vxPending = (!voxelOk) && !!(window.__voxelEst && window.__voxelEst.running);
-            const vxGrob = (voxelOk || vxPending) ? '' : ' (grob)';
+            const vxGrob = (voxelOk || vxPending) ? '' : t('mass.approx');
             document.getElementById('statVolume').textContent = vxPending ? '…' : `${printedVolumeCm3.toFixed(2)} cm³${vxGrob}`;
             document.getElementById('estMass').textContent = vxPending ? '…' : `${totalMass.toFixed(1)} g${vxGrob}`;
             document.getElementById('estInfillMass').textContent = vxPending ? '…' : `${infillMass.toFixed(1)} g${vxGrob}`;
@@ -2684,14 +3223,14 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
 
             // Transparenz: mit welchen Parametern wurde gerechnet und was fehlt noch?
             const vxNotes = [];
-            vxNotes.push(voxelOk ? 'Voxel-Modell' : 'Geometrisches Modell');
+            vxNotes.push(voxelOk ? t('vx.voxelModel') : t('vx.geoModel'));
             vxNotes.push('Flow ' + flowRatio.toFixed(2));
-            vxNotes.push('Infill-Linie ' + infillLineMm.toFixed(2) + ' mm, Muster ' + (infillPattern || 'default') +
-                ' (Querschnitt exakt: Linie x Schicht - Ecken)');
-            vxNotes.push('Haut oben ' + topSkinMm.toFixed(2) + ' mm / unten ' + botSkinMm.toFixed(2) + ' mm');
+            vxNotes.push(t('vx.infillLine', { v: infillLineMm.toFixed(2), p: infillPattern || 'default' }));
+            vxNotes.push(t('vx.skin', { t: topSkinMm.toFixed(2), b: botSkinMm.toFixed(2) }));
             if (slicerSettings && slicerSettings.bedWidthMm) {
-                vxNotes.push('Druckbett ' + slicerSettings.bedWidthMm.toFixed(0) + ' × ' + (slicerSettings.bedDepthMm || slicerSettings.bedWidthMm).toFixed(0) +
-                    (slicerSettings.bedHeightMm ? ' × ' + slicerSettings.bedHeightMm.toFixed(0) : '') + ' mm (aus 3MF)');
+                vxNotes.push(slicerSettings.bedHeightMm
+                    ? t('vx.bed3', { w: slicerSettings.bedWidthMm.toFixed(0), d: (slicerSettings.bedDepthMm || slicerSettings.bedWidthMm).toFixed(0), h: slicerSettings.bedHeightMm.toFixed(0) })
+                    : t('vx.bed', { w: slicerSettings.bedWidthMm.toFixed(0), d: (slicerSettings.bedDepthMm || slicerSettings.bedWidthMm).toFixed(0) }));
             }
             // Ehrlicher Hinweis: das Festmaterial (Top/Bottom + "internal solid infill") wird aus
             // den Voxel-Schichtbaendern geschaetzt. Bei ensure_vertical_shell_thickness=ensure_all
@@ -2700,12 +3239,12 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             try {
                 const ev = String((window.__raw3mf && window.__raw3mf.projectSettings && window.__raw3mf.projectSettings.ensure_vertical_shell_thickness) || '');
                 if (ev && ev !== 'ensure_critical_only') {
-                    vxNotes.push('Festmaterial: Slicer fuellt bei "' + ev + '" zusaetzlich unter schraegen Flaechen - hier um ~30-40 % unterschaetzt');
+                    vxNotes.push(t('vx.solidUnder', { ev: ev }));
                 }
             } catch (eEv) { }
-            if (slicerSettings && slicerSettings.enableSupport) vxNotes.push('ACHTUNG: Stuetzen (' + (slicerSettings.supportType || 'tree') + ') samt Stuetzen-Brim sind NICHT eingerechnet');
-            if (slicerSettings && slicerSettings.skirtLoops) vxNotes.push('Skirt nicht eingerechnet');
-            if (slicerSettings && slicerSettings.ironingType && slicerSettings.ironingType !== 'no ironing') vxNotes.push('Ironing nicht eingerechnet');
+            if (slicerSettings && slicerSettings.enableSupport) vxNotes.push(t('vx.supportNote', { t: slicerSettings.supportType || 'tree' }));
+            if (slicerSettings && slicerSettings.skirtLoops) vxNotes.push(t('vx.skirtNote'));
+            if (slicerSettings && slicerSettings.ironingType && slicerSettings.ironingType !== 'no ironing') vxNotes.push(t('vx.ironingNote'));
             const estMassEl = document.getElementById('estMass');
             if (estMassEl) {
                 estMassEl.title = vxNotes.join(' | ');
@@ -2726,7 +3265,9 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
         function loadDemoMesh() {
             resetState();
             document.getElementById('fileName').textContent = "Demo_Cosplay_Helmet_Project.3mf";
-            document.getElementById('fileDetails').textContent = "4.2 MB • Multi-Plate 3MF Demo";
+            document.getElementById('fileDetails').textContent = t('demo.details');
+            window.__fileState = null;
+            window.__demoState = true;
             document.getElementById('thumbnailContainer').classList.add('hidden');
 
             const demoGroup = new THREE.Group();
@@ -2735,6 +3276,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             const sphereGeo = new THREE.SphereGeometry(55, 32, 24, 0, Math.PI * 2, 0, Math.PI * 0.65);
             const helmetMesh = new THREE.Mesh(sphereGeo);
             helmetMesh.name = "Haupt-Helmschale";
+            helmetMesh.userData.demoKey = 'helmet';
             helmetMesh.userData.plateId = "Druckplatte 1";
             helmetMesh.position.set(-70, 0, 0);
             demoGroup.add(helmetMesh);
@@ -2742,6 +3284,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             const visorGeo = new THREE.CylinderGeometry(38, 42, 28, 24, 1, true, -Math.PI * 0.35, Math.PI * 0.7);
             const visorMesh = new THREE.Mesh(visorGeo);
             visorMesh.name = "Visier-Verstärkung";
+            visorMesh.userData.demoKey = 'visor';
             visorMesh.userData.plateId = "Druckplatte 1";
             visorMesh.position.set(-70, -10, 22);
             demoGroup.add(visorMesh);
@@ -2751,6 +3294,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             hornGeo1.rotateZ(-0.4);
             const horn1 = new THREE.Mesh(hornGeo1);
             horn1.name = "Aufsatz-Horn Links";
+            horn1.userData.demoKey = 'hornL';
             horn1.userData.plateId = "Druckplatte 2";
             horn1.position.set(70, 35, -20);
             demoGroup.add(horn1);
@@ -2759,6 +3303,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             hornGeo2.rotateZ(0.8);
             const horn2 = new THREE.Mesh(hornGeo2);
             horn2.name = "Aufsatz-Horn Rechts";
+            horn2.userData.demoKey = 'hornR';
             horn2.userData.plateId = "Druckplatte 2";
             horn2.position.set(70, 35, 20);
             demoGroup.add(horn2);
@@ -2767,22 +3312,113 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             const torusGeo = new THREE.TorusGeometry(14, 4.5, 12, 24);
             const ring1 = new THREE.Mesh(torusGeo);
             ring1.name = "Kopplungs-Ring A";
+            ring1.userData.demoKey = 'ringA';
             ring1.userData.plateId = "Druckplatte 3";
             ring1.position.set(0, 15, 80);
             demoGroup.add(ring1);
 
             const ring2 = ring1.clone();
             ring2.name = "Kopplungs-Ring B";
+            ring2.userData.demoKey = 'ringB';
             ring2.userData.plateId = "Druckplatte 3";
             ring2.position.set(0, 15, -80);
             demoGroup.add(ring2);
 
             processLoadedMeshGroup(demoGroup, "Demo_Cosplay_Helmet_Project.3mf");
-            showToast("Demo-Projekt mit 3 Druckplatten geladen!");
+            showToast(t('toast.demo'));
         }
 
         // KI-Tipps: inline (Single-File) - lokale Tipps + Prompt kopieren,
         // optional Direktabfrage via Kilo bei http(s).
+
+        // ---- i18n Helper: Anzeige-Übersetzungen für interne IDs/ Namen ----
+        // Interne Platten-IDs bleiben 'Druckplatte N' (Map-Keys, Vergleiche);
+        // nur die ANZEIGE wird je nach Sprache übersetzt.
+        function plateLabelDisp(pid) {
+            return String(pid).replace(/^Druckplatte\s+/, t('plate.plate'));
+        }
+        // Bauteil-Anzeigename: Demo-Namen (übersetzbar), Datei-Namen (unverändert),
+        // sonst sprachabhängiger Fallback 'Bauteil #N' / 'Part #N'.
+        function meshDisplayName(mesh, idx) {
+            if (mesh.userData && mesh.userData.demoKey) return t('demo.' + mesh.userData.demoKey);
+            if (mesh.name) {
+                // Interne Fallback-Namen aus dem Parser ('Bauteil #<id>') uebersetzen;
+                // echte Datei-Namen bleiben unveraendert (Slicer-Sprache).
+                var mB = /^(Negativ-)?Bauteil #(.+)$/.exec(mesh.name);
+                if (mB) return (mB[1] ? t('comp.negPrefix') : '') + t('comp.part') + '#' + mB[2];
+                return mesh.name;
+            }
+            var n = (mesh.userData && mesh.userData.autoNameIdx != null) ? mesh.userData.autoNameIdx : (idx + 1);
+            return ((mesh.userData && mesh.userData.isNegative) ? t('comp.negPrefix') : '') + t('comp.part') + '#' + n;
+        }
+        // Dynamische UI-Texte neu rendern, nachdem sich die Sprache geaendert hat.
+        // Reihenfolge wichtig: applyStaticI18n laeuft VORHER (setLanguage) und setzt
+        // die statischen Defaults - hier werden die dynamischen Zustende uebermalt.
+        window.applyDynamicI18n = function () {
+            // Datei-Karte (Zustand aus handleFileSelect / loadDemoMesh)
+            try {
+                if (window.__demoState) {
+                    document.getElementById('fileName').textContent = "Demo_Cosplay_Helmet_Project.3mf";
+                    document.getElementById('fileDetails').textContent = t('demo.details');
+                } else if (window.__fileState) {
+                    document.getElementById('fileDetails').textContent = t('file.details', window.__fileState);
+                }
+            } catch (eD1) { }
+            // Aus dem Projekt injizierte Dichte-Option neu beschriften
+            try {
+                if (window.__injectedDensity != null) {
+                    var ms = document.getElementById('matSelect');
+                    if (ms) {
+                        for (var iOpt = 0; iOpt < ms.options.length; iOpt++) {
+                            if (parseFloat(ms.options[iOpt].value) === window.__injectedDensity) {
+                                ms.options[iOpt].textContent = window.__injectedDensity.toFixed(2) + ' g/cm³ (' + t('opt.fromProject') + ')';
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (eD2) { }
+            // Platten-Dropdown, Badge, Bauteil-Liste, Stats, Massen
+            try {
+                if (typeof currentMeshGroup !== 'undefined' && currentMeshGroup) {
+                    var selP = document.getElementById('plateSelect');
+                    var prevVal = selP ? selP.value : 'all';
+                    populatePlateSelector();
+                    if (selP && prevVal) { try { selP.value = prevVal; } catch (eD3) { } }
+                    updateAnalyseBadge(activePlateId);
+                    recalculatePlateStats(); // setzt Stats + componentList + refreshEstimatedMass
+                } else if (typeof refreshEstimatedMass === 'function') {
+                    refreshEstimatedMass();
+                }
+            } catch (eD4) { console.warn('i18n plate/parts re-render:', eD4); }
+            // Thumbnail-Beschriftung
+            try {
+                var tc = document.getElementById('thumbnailCaption');
+                var tcont = document.getElementById('thumbnailContainer');
+                if (tc && tcont && !tcont.classList.contains('hidden')) tc.textContent = activePlateLabel(activePlateId);
+            } catch (eD5) { }
+            // Platten-Raster (falls offen): Kacheln + Summen neu aufbauen
+            try {
+                var ovG2 = document.getElementById('plateGridOverlay');
+                if (ovG2 && !ovG2.classList.contains('hidden') && typeof buildPlateGrid === 'function') buildPlateGrid();
+            } catch (eD6) { }
+            // KI-Box zurueck auf den Ausgangstext (nur wenn kein Laeufer aktiv)
+            try {
+                var runB = document.getElementById('btnRunAI');
+                var aiBox = document.getElementById('aiResultBox');
+                if (runB && aiBox && !runB.disabled) {
+                    aiBox.innerHTML = "<p class='text-slate-500 italic text-center py-6'>" + t('ai.initial') + "</p>";
+                }
+            } catch (eD7) { }
+            // Letzter Voxel-Fortschritt in der neuen Sprache neu setzen
+            try {
+                if (window.__vxLastProgress) {
+                    var lpVx = window.__vxLastProgress;
+                    var plVx = document.getElementById('estProgressLabel');
+                    if (plVx) plVx.textContent = (lpVx.label && lpVx.label.k) ? t(lpVx.label.k, lpVx.label.p) : lpVx.label;
+                }
+            } catch (eD8) { }
+        };
     </script>
     <script>
 /* KI-Tipps (inline, Single-File) */
@@ -2790,18 +3426,8 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
    POST https://api.kilo.ai/api/gateway/chat/completions, KEIN Auth-Header
    fuer :free-Modelle (Limit ~200 Req/h/IP). Fallback: lokale Heuristik. */
 window.__aiAbort = null;
-const AI_PREF_LABELS = {
-  balance: 'Balance / ausgewogen (Gewicht sparen, Stabilitaet halten)',
-  stabilitaet: 'Stabilitaet maximieren',
-  gewicht: 'Gewicht reduzieren',
-  material: 'Material sparen',
-  druckzeit: 'Druckzeit reduzieren',
-  oberflaeche: 'Oberflaechenqualitaet',
-  masshalt: 'Masshaltigkeit',
-  cosplay: 'Cosplay / tragbares Bauteil (leicht + schleifbar)',
-  funktional: 'Funktionales Bauteil (belastbar)',
-  optisch: 'Optisches Bauteil (Show-Teil)'
-};
+// Hinweis: Die Anzeige-Labels der Optimierungsziele stehen im i18n-Woerterbuch
+// (Schluessel 'ai.goal.<key>') - keine duplizierten deutschen Strings hier.
 const AI_GATEWAY_URL = 'https://api.kilo.ai/api/gateway/chat/completions';
 // Sammelt Geometrie-, Slicer- und Massedaten fuer den KI-Prompt.
 function gatherAIPayload() {
@@ -2834,7 +3460,7 @@ function gatherAIPayload() {
         dims = { xMm: +sz.x.toFixed(1), yMm: +sz.y.toFixed(1), zMm: +sz.z.toFixed(1) };
       } catch (eB) { dims = null; }
       var vv = (st.volumeCm3 != null) ? st.volumeCm3 : ((m.userData && m.userData.volumeCm3) || 0);
-      objects.push({ name: m.name || ('Bauteil ' + (i + 1)), platte: (m.userData && m.userData.plateId) || '', negativ: !!(m.userData && m.userData.isNegative), volumenCm3: +(+vv).toFixed(1), oberflaecheCm2: (st.surfaceAreaCm2 != null) ? +st.surfaceAreaCm2.toFixed(1) : null, dreiecke: st.triangleCount || null, masseMm: dims });
+      objects.push({ name: meshDisplayName(m, i), platte: (m.userData && m.userData.plateId) || '', negativ: !!(m.userData && m.userData.isNegative), volumenCm3: +(+vv).toFixed(1), oberflaecheCm2: (st.surfaceAreaCm2 != null) ? +st.surfaceAreaCm2.toFixed(1) : null, dreiecke: st.triangleCount || null, masseMm: dims });
     });
   } catch (eO) { /* keine Szene */ }
   var platten = [];
@@ -2855,7 +3481,7 @@ function gatherAIPayload() {
     wandlinien: wallCount,
     wandstaerkeMm: +((ctx ? ctx.wallCount : wallCount) * lwProf).toFixed(2),
     infillProzent: Number.isFinite(infillPct) ? infillPct : (ctx ? ctx.infillPercent : 10),
-    infillMuster: (ctx && ctx.infillPattern) || ((ss && ss.sparseInfillPattern) || 'unbekannt'),
+    infillMuster: (ctx && ctx.infillPattern) || ((ss && ss.sparseInfillPattern) || t('ai.unknown')),
     topLayer: topLayers,
     bottomLayer: ctx ? ctx.bottomLayerCount : Math.max(2, topLayers - 1),
     topHautMm: ctx ? +ctx.topSkinMm.toFixed(2) : null,
@@ -2872,7 +3498,7 @@ function gatherAIPayload() {
   var plateLbl = String(typeof activePlateId !== 'undefined' ? activePlateId : 'all');
   try { if (typeof activePlateLabel === 'function') plateLbl = activePlateLabel(activePlateId); } catch (eL) { /* Fallback */ }
   return {
-    ziel: AI_PREF_LABELS[prefKey] || prefKey, zielKey: prefKey,
+    ziel: t('ai.goal.' + prefKey), zielKey: prefKey,
     datei: (window.__raw3mf && window.__raw3mf.fileName) || txt('fileName'),
     geometrie: { druckvolumenCm3: meshStats.volumeCm3 || 0, vollvolumenCm3: meshStats.volumeSolidCm3 || 0, oberflaecheCm2: meshStats.surfaceAreaCm2 || 0, dreiecke: meshStats.triangleCount || 0, bauvolumenMm: { x: +(meshStats.sizeX || 0).toFixed(1), y: +(meshStats.sizeY || 0).toFixed(1), z: +(meshStats.sizeZ || 0).toFixed(1) }, objektzahl: meshStats.objectCount || objects.length, objekte: objects },
     slicer: slicer,
@@ -2883,15 +3509,15 @@ function gatherAIPayload() {
 
 function buildAIMessages(p) {
   var g = p.geometrie, s = p.slicer;
-  var sys = 'Du bist Slicer-Experte (Bambu, Orca, FDM). Deutsch, kompakt.';
-  var u = "Ziel: " + p.ziel + " | Datei: " + (p.datei || "nb") + " | Platte: " + p.aktivePlatte;
-  var u2 = "Geometrie: DruckVol " + g.druckvolumenCm3 + "cm3, Oberfl " + g.oberflaecheCm2 + "cm2, N=" + g.objektzahl;
-  var u3 = "Slicer: Wand " + s.wandlinien + " (~" + s.wandstaerkeMm + "mm), Infill " + s.infillProzent + "% " + s.infillMuster;
-  var u4 = "Top " + s.topLayer + "/Bot " + s.bottomLayer + ", Schicht " + s.schichthoeheMm + "mm, Flow " + s.flow;
-  var u5 = "Mat: " + s.material + " D=" + s.dichte + " | Masse: " + p.masse.gesamt + " W:" + p.masse.waende + " F:" + p.masse.festmaterial + " I:" + p.masse.fuellung;
-  var u6 = "Platten: " + p.platten.map(function (x) { return x.platte + ":" + (x.gewichtG != null ? x.gewichtG + "g" : x.objekte + "Obj"); }).join(" | ");
-  var u7 = "Teile: " + g.objekte.slice(0, 20).map(function (o, i) { return (i + 1) + "." + o.name + " " + o.volumenCm3 + "cm3"; }).join("; ");
-  var u8 = "Aufgabe: max 6 Aenderungen (Param alt-neu + Wirkung), 1 Satz Fazit.";
+  var sys = t('ai.sys');
+  var u = t('ai.pGoalLine', { z: p.ziel, d: (p.datei || t('ai.pNoFile')), p: p.aktivePlatte });
+  var u2 = t('ai.pGeo', { v: g.druckvolumenCm3, o: g.oberflaecheCm2, n: g.objektzahl });
+  var u3 = t('ai.pSlicer', { w: s.wandlinien, t: s.wandstaerkeMm, i: s.infillProzent, m: s.infillMuster });
+  var u4 = t('ai.pLayers', { t: s.topLayer, b: s.bottomLayer, h: s.schichthoeheMm, f: s.flow });
+  var u5 = t('ai.pMat', { m: s.material, d: s.dichte, g: p.masse.gesamt, w: p.masse.waende, f: p.masse.festmaterial, i: p.masse.fuellung });
+  var u6 = t('ai.pPlates') + p.platten.map(function (x) { return x.platte + ":" + (x.gewichtG != null ? x.gewichtG + "g" : x.objekte + t('ai.pObj')); }).join(" | ");
+  var u7 = t('ai.pParts') + g.objekte.slice(0, 20).map(function (o, i) { return (i + 1) + "." + o.name + " " + o.volumenCm3 + "cm3"; }).join("; ");
+  var u8 = t('ai.task');
   return [{ role: "system", content: sys }, { role: "user", content: [u, u2, u3, u4, u5, u6, u7, u8].join(" / ") }];
 }
 
@@ -2899,10 +3525,10 @@ function buildAIMessages(p) {
 async function aiCopyPrompt() {
   var payload = gatherAIPayload();
   var msgs = buildAIMessages(payload);
-  var txt = msgs.map(function (m) { return (m.role === 'user' ? 'AUFGABE:\n' : 'SYSTEM:\n') + m.content; }).join('\n\n---\n\n');
+  var txt = msgs.map(function (m) { return (m.role === 'user' ? t('ai.taskHead') + '\n' : t('ai.sysHead') + '\n') + m.content; }).join('\n\n---\n\n');
   try {
     await navigator.clipboard.writeText(txt);
-    try { showToast('Prompt kopiert (' + txt.length + ' Zeichen) - in ChatGPT/Claude/Kilo einfuegen.'); } catch (eT) {}
+    try { showToast(t('prompt.copied', { n: txt.length })); } catch (eT) {}
   } catch (eC) {
     var ta = document.createElement('textarea');
     ta.value = txt;
@@ -2910,7 +3536,7 @@ async function aiCopyPrompt() {
     ta.select();
     try { document.execCommand('copy'); } catch (eX) {}
     document.body.removeChild(ta);
-    try { showToast('Prompt kopiert (Fallback) - in ChatGPT/Claude/Kilo einfuegen.'); } catch (eT2) {}
+    try { showToast(t('prompt.copiedFallback')); } catch (eT2) {}
   }
 }
 
@@ -2926,7 +3552,7 @@ async function aiPostKilo(payload) {
   var proto = "";
   try { proto = window.location ? window.location.protocol : ""; } catch (eP0) { proto = ""; }
   if (proto !== "http:" && proto !== "https:") {
-    throw new Error("file://-Modus: Direktabfrage blockiert der Browser (CORS). Lokale Einschaetzung + Prompt kopieren nutzen.");
+    throw new Error(t('ai.fileHint'));
   }
   var body = JSON.stringify(payload);
   var sig = window.__aiAbort ? window.__aiAbort.signal : undefined;
@@ -3024,49 +3650,51 @@ function aiLocalTips(payload, leadHtml) {
   var s = p.slicer || {};
   var g = p.geometrie || {};
   var m = p.masse || {};
-  var pk = p.ziel || "balance";
-  var wall = s.waende ?? 3;
+  var pk = p.zielKey || "balance";
+  var pkLabel = p.ziel || t('ai.goal.' + pk);
+  var wall = s.wandlinien ?? s.waende ?? 3;
   var inf = s.infillProzent ?? 5;
-  var lay = s.schichtenBoden ?? 4;
+  var lay = s.topLayer ?? s.schichtenBoden ?? 4;
+  var infPat = s.infillMuster || t('ai.unknown');
   var lines = [];
   var push = function (t, alt, neu, warum) { lines.push({ t: t, alt: alt, neu: neu, warum: warum }); };
   if (pk === "gewicht" || pk === "material" || pk === "cosplay") {
-    if (wall > 2) push("Wandlinien", wall + " -> 2", "Wandvolumen sinkt ~1/3", "dünnwandige Cosplay-Teile tragen kaum Biegelast über die Wand");
-    else push("Wandlinien", "bei 2 belassen", "Minimum für Schleifbarkeit", "1 Wandlinie reisst beim Schleifen");
-    if (inf > 5) push("Infill", inf + "% -> 5% (lightning/grid)", "Füllmasse halbiert", "adaptives Infill verdichtet wandnah von selbst");
-    else push("Infill", "bei " + inf + "% belassen", "bereits sparsam", "tiefer lohnt nur mit mehr Wand");
-    if (lay > 3) push("Bodenschichten", lay + " -> 3", "Hautvolumen -25%", "Tragfläche braucht keine 4+ Lagen");
-    push("Muster", (s.infillMuster || "adaptiv") + " -> lightning", "tiefste Dichte im Kern", "für reine Optik-/Trageteile");
+    if (wall > 2) push(t('tip.wallLines'), wall + " -> 2", t('tip.wallVolDown'), t('tip.wallWhyThin'));
+    else push(t('tip.wallLines'), t('tip.keep2'), t('tip.minSanding'), t('tip.wallBreak'));
+    if (inf > 5) push(t('tip.infill'), inf + "% -> 5% (lightning/grid)", t('tip.fillHalf'), t('tip.adaptiveSelf'));
+    else push(t('tip.infill'), t('tip.infillKeep', { v: inf }), t('tip.alreadyCheap'), t('tip.deeperOnlyWalls'));
+    if (lay > 3) push(t('tip.bottomLayers'), lay + " -> 3", t('tip.skinCut'), t('tip.skinWhy'));
+    push(t('tip.pattern'), infPat + " -> lightning", t('tip.patternCore'), t('tip.patternWhy'));
   } else if (pk === "stabilitaet" || pk === "funktional") {
-    if (wall < 4) push("Wandlinien", wall + " -> 4-5", "Biegesteifigkeit steigt überproportional", "Wand trägt mehr als Infill");
-    if (inf < 20) push("Infill", inf + "% -> 20-30% (gyroid/grid)", "Druck-/Scherfestigkeit", "gyroid isotroper als grid");
-    push("Orientierung", "Last in XY legen", "Zugfestigkeit Z nur ~50%", "Schichtverbund ist die Schwachstelle");
+    if (wall < 4) push(t('tip.wallLines'), wall + " -> 4-5", t('tip.stiffOver'), t('tip.wallCarries'));
+    if (inf < 20) push(t('tip.infill'), inf + "% -> 20-30% (gyroid/grid)", t('tip.printShear'), t('tip.gyroidIso'));
+    push(t('tip.orientation'), t('tip.loadXY'), t('tip.tensionZ'), t('tip.layerWeak'));
   } else if (pk === "druckzeit") {
-    push("Schichthoehe", (s.schichtMm || 0.2) + " -> 0.28-0.3 mm", "Zeit -30%", "bei 0.4er Düse unkritisch für Optikteile");
-    if (wall > 2) push("Wandlinien", wall + " -> 2", "Umfangwege -1/3", "grösster Zeithebel nach Infill");
-    if (inf > 10) push("Infill", inf + "% -> 5-10%", "Füllwege halbiert", "Kern füllt adaptiv nach");
+    push(t('tip.layerHeight'), (s.schichthoeheMm ?? s.schichtMm ?? 0.2) + " -> 0.28-0.3 mm", t('tip.timeSave'), t('tip.nozzleOk'));
+    if (wall > 2) push(t('tip.wallLines'), wall + " -> 2", t('tip.perimThird'), t('tip.biggestLever'));
+    if (inf > 10) push(t('tip.infill'), inf + "% -> 5-10%", t('tip.fillHalve'), t('tip.coreAdaptive'));
   } else if (pk === "oberflaeche" || pk === "optisch") {
-    push("Deckschichten", "Top +1 Lage", "lückenlose Decke", "Bügeln (ironing) optional dazu");
-    push("Aussenwand", "0.42 -> 0.35-0.4 mm + moderate Speed", "feinere Kontur", "dünne Aussenlinie glättet");
-    if (inf < 15) push("Infill", inf + "% -> 15%+", "stützt Decke", "verhindert Einfallstellen");
+    push(t('tip.topLayers'), t('tip.topPlus1'), t('tip.topPlus'), t('tip.ironingOpt'));
+    push(t('tip.outerWall'), t('tip.outerThin'), t('tip.thinContour'), t('tip.smoothLine'));
+    if (inf < 15) push(t('tip.infill'), inf + "% -> 15%+", t('tip.supportsDeck'), t('tip.noSinking'));
   } else if (pk === "masshalt") {
-    push("Schwindung", "PLA: Kontur -0.1-0.2% bzw. Loch +0.2 mm", "Passung", "Bohrungen schrumpfen stärker");
-    push("Flow/Kalibrierung", "Flow " + (s.flow ?? "?") + " prüfen", "Mass ohne Raten", "erst Kalibrierwürfel, dann Bauteil");
+    push(t('tip.shrinkage'), t('tip.shrinkVals'), t('tip.fit'), t('tip.holesShrink'));
+    push(t('tip.flowCal'), t('tip.flowPrefix') + (s.flow ?? "?") + t('tip.checkFlow'), t('tip.massNoGuess'), t('tip.cubeFirst'));
   } else {
-    push("Wandlinien", wall + " -> 3", "guter Kompromiss", "Steifigkeit ohne viel Masse");
-    push("Infill", inf + "% -> 10% (gyroid)", "Balance", "isotrop + stützt Haut");
+    push(t('tip.wallLines'), wall + " -> 3", t('tip.goodCompromise'), t('tip.stiffNoMass'));
+    push(t('tip.infill'), inf + "% -> 10% (gyroid)", t('tip.balance'), t('tip.isoSkin'));
   }
   if (lines.length > 6) lines = lines.slice(0, 6);
   var htm = "";
   if (leadHtml) htm += "<div class='p-2.5 rounded-lg bg-slate-800/70 border border-slate-700'><p class='text-[11px] text-slate-300'>" + leadHtml + "</p></div>";
   htm += "<div class='p-2.5 rounded-lg bg-slate-900 border border-cyan-900/50'>"
-    + "<p class='font-semibold text-cyan-400 text-xs'>Lokale Einschaetzung: " + ((typeof AI_PREF_LABELS !== "undefined" && AI_PREF_LABELS[pk]) || pk) + "</p>"
-    + "<p class='text-[10px] text-slate-500'>Basis: " + (m.gesamt || "?") + " | Wand " + (m.waende || "?") + " | Fest " + (m.fest || "?") + " | Füllung " + (m.fuellung || "?")
-    + " | Bauteil " + (g.datei || "?") + " (" + (g.bauteile || "?") + " Teile, " + (g.xMm || "?") + "x" + (g.yMm || "?") + "x" + (g.zMm || "?") + " mm)</p>"
+    + "<p class='font-semibold text-cyan-400 text-xs'>" + t('ai.localAssess') + pkLabel + "</p>"
+    + "<p class='text-[10px] text-slate-500'>" + t('ai.basis') + (m.gesamt || "?") + " | " + t('ai.bWand') + (m.waende || "?") + " | " + t('ai.bFest') + (m.fest || "?") + " | " + t('ai.bFill') + (m.fuellung || "?")
+    + " | " + t('ai.bPart') + (g.datei || "?") + " (" + (g.bauteile || "?") + t('ai.parts') + (g.xMm || "?") + "x" + (g.yMm || "?") + "x" + (g.zMm || "?") + " mm)</p>"
     + "<ul class='mt-1 space-y-1'>" + lines.map(function (L, ix) {
     return "<li class='text-[11px] text-slate-300'><b>" + (ix + 1) + ". " + L.t + ":</b> " + L.alt + " — <i>" + L.neu + ".</i><br><span class='text-slate-500'>" + L.warum + ".</span></li>";
   }).join("") + "</ul>"
-    + "<p class='text-[10px] text-slate-500 mt-1'>Tipp: <b>Prompt kopieren</b> übertraegt alle Zahlen in ChatGPT/Claude/Kilo für eine ausführliche Analyse.</p></div>";
+    + "<p class='text-[10px] text-slate-500 mt-1'>" + t('ai.tipNote') + "</p></div>";
   box.innerHTML = htm;
 }
 async function runAIAnalysis() {
@@ -3082,8 +3710,8 @@ async function runAIAnalysis() {
       var tEl = document.getElementById("aiTokensSelect");
       var maxTokens = (tEl && parseInt(tEl.value, 10)) || 1536;
       aiSetRunning(true);
-      box.innerHTML = "<div class='py-8 text-center text-cyan-400 text-xs'>Frage KI (" + model
-        + ") zu Ziel ...</div><div id='aiStreamOut' class='text-[11px] text-slate-300 whitespace-pre-wrap'></div>";
+      box.innerHTML = "<div class='py-8 text-center text-cyan-400 text-xs'>" + t('ai.asking', { m: model })
+        + "</div><div id='aiStreamOut' class='text-[11px] text-slate-300 whitespace-pre-wrap'></div>";
       var out = document.getElementById("aiStreamOut");
       var acc = "";
       var messages = buildAIMessages(payload);
@@ -3095,22 +3723,21 @@ async function runAIAnalysis() {
       if (acc.trim()) {
         var safe = acc.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         box.innerHTML = "<div class='p-2.5 rounded-lg bg-slate-900 border border-cyan-900/50'>"
-          + "<p class='font-semibold text-cyan-400 text-xs'>KI-Empfehlung (" + (res.model || model) + ")</p>"
+          + "<p class='font-semibold text-cyan-400 text-xs'>" + t('ai.recommend', { m: (res.model || model) }) + "</p>"
           + "<div class='text-[11px] text-slate-300 whitespace-pre-wrap'>" + safe.trim() + "</div></div>"
-          + "<p class='text-[10px] text-slate-500'>Basis: Masse " + (payload.masse.gesamt || "?")
-          + " | anonym via Kilo Gateway (:free).</p>";
+          + "<p class='text-[10px] text-slate-500'>" + t('ai.basisMass', { g: (payload.masse.gesamt || "?") }) + "</p>";
         return;
       }
     } else {
-      lead = "Hinweis: file://-Modus - Direktabfrage blockiert der Browser (CORS). Nutze <b>Prompt kopieren</b>.";
+      lead = t('ai.fileHint');
     }
   } catch (err) {
     try { aiSetRunning(false); } catch (eS) {}
     if (err && err.name === "AbortError") {
-      box.innerHTML = "<p class='text-slate-500 italic text-center py-6'>Abgebrochen.</p>";
+      box.innerHTML = "<p class='text-slate-500 italic text-center py-6'>" + t('ai.aborted') + "</p>";
       return;
     }
-    lead = "Hinweis: KI-Gateway nicht erreichbar (" + ((err && err.message) || err) + "). Lokale Einschaetzung + <b>Prompt kopieren</b> für ChatGPT/Claude/Kilo.";
+    lead = t('ai.gatewayHint', { e: ((err && err.message) || err) });
   }
   aiLocalTips(payload, lead);
 }
@@ -3188,7 +3815,11 @@ function vxProgress(label, frac) {
 
     if (b) b.style.width = Math.round(frac * 100) + '%';
 
-    if (l) l.textContent = label;
+    // label: '{key}'-String ODER {k:'key', p:{...}} - fuer die Uebersetzung beim
+    // Sprachwechsel wird der letzte Stand gemerkt (window.__vxLastProgress).
+    if (l) l.textContent = (label && label.k) ? t(label.k, label.p) : label;
+
+    window.__vxLastProgress = { label: label, frac: frac };
 
     if (p) p.textContent = Math.round(frac * 100) + '%';
 
@@ -4321,7 +4952,7 @@ async function vxEnsurePlateCache(zielKey) {
     // gewaehlte Platte nachgezogen werden - aber nicht bei Fehlschlaegen, sonst Endlosschleife).
     // Muss VOR dem try stehen, damit der finally-Block es sieht.
     let produced = false;
-    vxProgress('Voxel-Analyse: Projekt wird gelesen ...', 0);
+    vxProgress({ k: 'vx.reading' }, 0);
     try {
         const P = vxReadProjekt();
         if (!P) throw new Error('3dmodel.model fehlt');
@@ -4353,12 +4984,12 @@ async function vxEnsurePlateCache(zielKey) {
         for (let n = 0; n < ids.length; n++) {
             if (window.__voxelEst.cancelled || gen !== window.__voxelEst.generation) throw new Error('abgebrochen');
             const oid = String(ids[n]);
-            vxProgress('Voxel-Analyse: Objekt ' + oid + ' (' + (n + 1) + '/' + ids.length + ')', n / ids.length);
+            vxProgress({ k: 'vx.obj', p: { id: oid, i: (n + 1), n: ids.length } }, n / ids.length);
             const okey = (raw.fileName || '') + '|' + oid + '|dz' + dz;
             let r = window.__voxelEst.objCache.get(okey);
             if (!r) {
                 r = await vxSchaetzeObjekt(P, oid, dz, function (phase, f) {
-                    if (phase === 'layer') vxProgress('Voxel-Analyse: Objekt ' + oid + ' Schicht ' + Math.round(f * 100) + '%', (n + f) / ids.length);
+                    if (phase === 'layer') vxProgress({ k: 'vx.objLayer', p: { id: oid, p: Math.round(f * 100) } }, (n + f) / ids.length);
                 });
                 window.__voxelEst.objCache.set(okey, r);
             }
@@ -4368,7 +4999,7 @@ async function vxEnsurePlateCache(zielKey) {
         window.__voxelEst.cache.set(key, { objects: ergebnisse, plateLabel: plateLabel, ms: Math.round(performance.now() - t0) });
         produced = true;
         window.__voxelEst.lastResult = { key: key, objects: ergebnisse.length, ms: Math.round(performance.now() - t0) };
-        vxProgress('Voxel-Analyse fertig (' + ergebnisse.length + ' Objekte)', 1);
+        vxProgress({ k: 'vx.done', p: { n: ergebnisse.length } }, 1);
         try { if (typeof refreshEstimatedMass === 'function') refreshEstimatedMass(); } catch (eR) { }
         // Offene Platten-Uebersicht aktualisieren: die Massen je Platte erscheinen damit
         // von selbst, sobald die Berechnung fertig ist.
@@ -4382,7 +5013,7 @@ async function vxEnsurePlateCache(zielKey) {
         }, 1800);
     } catch (eEns) {
         if (gen === window.__voxelEst.generation && eEns && eEns.message !== 'abgebrochen') {
-            vxProgress('Voxel-Analyse: ' + (eEns.message || eEns), 0);
+            vxProgress({ k: 'vx.error', p: { e: (eEns.message || eEns) } }, 0);
         }
     } finally {
         if (gen === window.__voxelEst.generation) {
