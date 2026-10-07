@@ -1262,9 +1262,7 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             // AI analysis button (Kilo Gateway, keyless :free models)
             document.getElementById('btnRunAI').addEventListener('click', runAIAnalysis);
             const stopBtn = document.getElementById('btnStopAI');
-            if (stopBtn) stopBtn.addEventListener('click', () => {
-                if (window.__aiAbort) { try { window.__aiAbort.abort(); } catch (e) { } }
-            });
+            if (stopBtn) stopBtn.addEventListener('click', triggerUserAbort);
         }
 
         async function handleFileSelect(file) {
@@ -1945,6 +1943,35 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             reader.readAsArrayBuffer(file);
         }
 
+        function disposeGroup(group) {
+            if (!group) return;
+
+            const textureKeys = [
+                'map', 'bumpMap', 'normalMap', 'displacementMap',
+                'roughnessMap', 'metalnessMap', 'alphaMap', 'aoMap', 'emissiveMap'
+            ];
+
+            group.traverse((child) => {
+                if (child.isMesh || child.isLine || child.isPoints) {
+                    if (child.geometry) child.geometry.dispose();
+
+                    if (child.material) {
+                        const materials = Array.isArray(child.material) ? child.material : [child.material];
+                        materials.forEach((mat) => {
+                            textureKeys.forEach((key) => {
+                                if (mat[key] && typeof mat[key].dispose === 'function') {
+                                    mat[key].dispose();
+                                }
+                            });
+                            mat.dispose();
+                        });
+                    }
+                }
+            });
+
+            group.clear();
+        }
+
         function processLoadedMeshGroup(objectGroup, name = "3MF Model") {
             // Clear existing scene objects. Den Dreh-Pivot aufloesen und Bett/Bauteile mit
             // Welterhalt in die Szene zurueckholen (Bett-Ausrichtung fuer den Neustart zurueck).
@@ -1954,8 +1981,17 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
                 scene.remove(currentMeshPivot);
                 currentMeshPivot = null;
             }
-            if (currentMeshGroup) scene.remove(currentMeshGroup);
-            if (boundingBoxHelper) scene.remove(boundingBoxHelper);
+            if (currentMeshGroup) {
+                scene.remove(currentMeshGroup);
+                disposeGroup(currentMeshGroup);
+                currentMeshGroup = null;
+            }
+            if (boundingBoxHelper) {
+                if (boundingBoxHelper.geometry) boundingBoxHelper.geometry.dispose();
+                if (boundingBoxHelper.material) boundingBoxHelper.material.dispose();
+                scene.remove(boundingBoxHelper);
+                boundingBoxHelper = null;
+            }
 
             currentMeshGroup = new THREE.Group();
             plateMap.clear();
@@ -3463,10 +3499,16 @@ function gatherAIPayload() {
   try { matLabel = matSel ? (matSel.options[matSel.selectedIndex] || {}).textContent || '' : ''; } catch (eM) { matLabel = ''; }
   var density = ctx ? ctx.density : (parseFloat(matSel ? matSel.value : '1.24') || 1.24);
   var txt = function (id) { var el = document.getElementById(id); return el ? el.textContent.trim() : ''; };
+
+  // Objekte: nur aktiver Kontext (Platte oder alle)
   var objects = [];
   try {
     var meshes = (typeof currentMeshGroup !== 'undefined' && currentMeshGroup && currentMeshGroup.children) ? currentMeshGroup.children : [];
-    meshes.forEach(function (m, i) {
+    var activeMeshes = (activePlateId !== 'all' && activePlateId != null)
+      ? meshes.filter(function (m) { return m.userData && m.userData.plateId === activePlateId; })
+      : meshes;
+
+    activeMeshes.forEach(function (m, i) {
       if (i >= 40) return;
       var st = (m.userData && m.userData.stats) || {};
       var dims = null;
@@ -3477,36 +3519,62 @@ function gatherAIPayload() {
         dims = { xMm: +sz.x.toFixed(1), yMm: +sz.y.toFixed(1), zMm: +sz.z.toFixed(1) };
       } catch (eB) { dims = null; }
       var vv = (st.volumeCm3 != null) ? st.volumeCm3 : ((m.userData && m.userData.volumeCm3) || 0);
-      objects.push({ name: meshDisplayName(m, i), platte: (m.userData && m.userData.plateId) || '', negativ: !!(m.userData && m.userData.isNegative), volumenCm3: +(+vv).toFixed(1), oberflaecheCm2: (st.surfaceAreaCm2 != null) ? +st.surfaceAreaCm2.toFixed(1) : null, dreiecke: st.triangleCount || null, masseMm: dims });
+      var isNeg = !!(m.userData && m.userData.isNegative);
+      objects.push({
+        name: meshDisplayName(m, i),
+        platte: (m.userData && m.userData.plateId) || '',
+        isNegative: isNeg,
+        printable: !isNeg,
+        geometricVolumeCm3: +(+vv).toFixed(1),
+        surfaceAreaCm2: (st.surfaceAreaCm2 != null) ? +st.surfaceAreaCm2.toFixed(1) : null,
+        triangleCount: st.triangleCount || null,
+        dimensionsMm: dims
+      });
     });
   } catch (eO) { /* keine Szene */ }
+  // Platten: plateMap als strukturelle Basis, Voxel-Daten als Overlay
   var platten = [];
+  // 1. Strukturelle Basis aus plateMap (immer korrekte Objektzahlen)
+  if (typeof plateMap !== 'undefined' && plateMap) {
+    plateMap.forEach(function (arr, k) {
+      platten.push({ platte: String(k), objekte: (arr || []).length });
+    });
+  }
+  // 2. Voxel-Masse-Daten darüberlegen (falls vorhanden)
   try {
     if (typeof vxMasseProPlatte === 'function') {
       var mp = vxMasseProPlatte();
-      mp.forEach(function (v, k) { platten.push({ platte: String(k), gewichtG: +v.g.toFixed(1), volumenCm3: +v.cm3.toFixed(1), filamentM: +v.m.toFixed(1), objekte: v.n }); });
+      mp.forEach(function (v, k) {
+        var existing = platten.find(function (p) { return p.platte === String(k); });
+        if (existing) {
+          existing.gewichtG = +v.g.toFixed(1);
+          existing.volumenCm3 = +v.cm3.toFixed(1);
+          existing.filamentM = +v.m.toFixed(1);
+        } else {
+          platten.push({ platte: String(k), gewichtG: +v.g.toFixed(1), volumenCm3: +v.cm3.toFixed(1), filamentM: +v.m.toFixed(1), objekte: v.n });
+        }
+      });
     }
   } catch (eP) { /* kein Voxel-Cache */ }
-  if (!platten.length && typeof plateMap !== 'undefined' && plateMap) {
-    plateMap.forEach(function (arr, k) { platten.push({ platte: String(k), objekte: (arr || []).length }); });
-  }
-  // NUR die aktuell ausgewählte Platte in das Payload und den Prompt aufnehmen
+
+  // Ausgewählte Platte: plateMap für Objektzahl, Voxel für Masse/Volumen/Filament
   var selectedPlatte = null;
   if (activePlateId !== 'all' && activePlateId != null) {
     selectedPlatte = { platte: String(activePlateId) };
+    // 1. Immer plateMap für Objektzahl (strukturelle Wahrheit)
+    if (plateMap && plateMap.get(activePlateId)) {
+      selectedPlatte.objekte = (plateMap.get(activePlateId) || []).length;
+    }
+    // 2. Voxel-Daten als Overlay (Map.get() verwenden!)
     if (typeof vxMasseProPlatte === 'function') {
       var mp = vxMasseProPlatte();
-      if (mp && mp[selectedPlatte.platte] != null) {
-        selectedPlatte = {
-          platte: String(activePlateId),
-          gewichtG: +mp[activePlateId].g.toFixed(1),
-          volumenCm3: +mp[activePlateId].cm3.toFixed(1),
-          filamentM: +mp[activePlateId].m.toFixed(1),
-          objekte: mp[activePlateId].n
-        };
+      var pv = mp && mp.get ? mp.get(activePlateId) : null;
+      if (pv) {
+        selectedPlatte.gewichtG = +pv.g.toFixed(1);
+        selectedPlatte.volumenCm3 = +pv.cm3.toFixed(1);
+        selectedPlatte.filamentM = +pv.m.toFixed(1);
+        // NICHT pv.n als Objektzahl übernehmen (kann 0 sein)
       }
-    } else if (plateMap && plateMap.get(activePlateId)) {
-      selectedPlatte.objekte = (plateMap.get(activePlateId) || []).length;
     }
   }
   var ss = (typeof slicerSettings !== 'undefined') ? slicerSettings : null;
@@ -3536,7 +3604,20 @@ function gatherAIPayload() {
   return {
     ziel: t('ai.goal.' + prefKey), zielKey: prefKey,
     datei: (window.__raw3mf && window.__raw3mf.fileName) || txt('fileName'),
-    geometrie: { druckvolumenCm3: meshStats.volumeCm3 || 0, vollvolumenCm3: meshStats.volumeSolidCm3 || 0, oberflaecheCm2: meshStats.surfaceAreaCm2 || 0, dreiecke: meshStats.triangleCount || 0, bauvolumenMm: { x: +(meshStats.sizeX || 0).toFixed(1), y: +(meshStats.sizeY || 0).toFixed(1), z: +(meshStats.sizeZ || 0).toFixed(1) }, objektzahl: meshStats.objectCount || objects.length, objekte: objects },
+    geometrie: {
+      // NEU: eindeutige Volumen-Semantik für KI
+      geometricSolidCm3: meshStats.volumeSolidCm3 || 0,
+      printedMaterialCm3: meshStats.volumeCm3 || 0,
+      // LEGACY: Rückwärtskompatibilität
+      druckvolumenCm3: meshStats.volumeCm3 || 0,
+      vollvolumenCm3: meshStats.volumeSolidCm3 || 0,
+      oberflaecheCm2: meshStats.surfaceAreaCm2 || 0,
+      dreiecke: meshStats.triangleCount || 0,
+      bauvolumenMm: { x: +(meshStats.sizeX || 0).toFixed(1), y: +(meshStats.sizeY || 0).toFixed(1), z: +(meshStats.sizeZ || 0).toFixed(1) },
+      objektzahl: objects.length,
+      druckbareObjektzahl: objects.filter(function (o) { return o.printable; }).length,
+      objekte: objects
+    },
     slicer: slicer,
     masse: { gesamt: txt('estMass'), waende: txt('massWalls'), festmaterial: txt('massSkin'), fuellung: txt('massInfill'), brim: txt('massBrim'), filamentLaenge: txt('massMeter'), scope: txt('massScope') },
     platten: (selectedPlatte ? [selectedPlatte] : platten),
@@ -3549,17 +3630,42 @@ function gatherAIPayload() {
 function buildAIMessages(p) {
   var g = p.geometrie, s = p.slicer;
   var sys = t('ai.sys');
-  var u = t('ai.pGoalLine', { z: p.ziel, d: (p.datei || t('ai.pNoFile')), p: p.aktivePlatte });
-  var u2 = t('ai.pGeo', { v: g.druckvolumenCm3, o: g.oberflaecheCm2, n: g.objektzahl });
-  var u3 = t('ai.pSlicer', { w: s.wandlinien, t: s.wandstaerkeMm, i: s.infillProzent, m: s.infillMuster });
-  var u4 = t('ai.pLayers', { t: s.topLayer, b: s.bottomLayer, h: s.schichthoeheMm, f: s.flow });
-  var u5 = t('ai.pMat', { m: s.material, d: s.dichte, g: p.masse.gesamt, w: p.masse.waende, f: p.masse.festmaterial, i: p.masse.fuellung });
-  var u6 = (p.selectedPlatte)
-    ? t('ai.pPlateSingle', { p: p.selectedPlatte.platte, g: p.selectedPlatte.gewichtG != null ? p.selectedPlatte.gewichtG + "g" : (p.selectedPlatte.objekte || 0) + t('ai.pObj') })
-    : t('ai.pPlates') + p.platten.map(function (x) { return x.platte + ":" + (x.gewichtG != null ? x.gewichtG + "g" : x.objekte + t('ai.pObj')); }).join(" | ");
-  var u7 = t('ai.pParts') + g.objekte.slice(0, 20).map(function (o, i) { return (i + 1) + "." + o.name + " " + o.volumenCm3 + "cm3"; }).join("; ");
-  var u8 = t('ai.task');
-  return [{ role: "system", content: sys }, { role: "user", content: [u, u2, u3, u4, u5, u6, u7, u8].join(" / ") }];
+
+  var sections = [];
+
+  // GEOMETRY
+  sections.push("GEOMETRY");
+  sections.push("Solid volume: " + g.geometricSolidCm3.toFixed(1) + " cm3");
+  sections.push("Surface area: " + (g.oberflaecheCm2 || 0).toFixed(1) + " cm2");
+  sections.push("Printable parts: " + g.druckbareObjektzahl);
+  sections.push("Void parts: " + g.objekte.filter(function(o){return o.isNegative;}).length);
+  sections.push("Parts by plate: " + (p.platten || []).map(function(pl){
+    return pl.platte + ": " + pl.objekte + " obj";
+  }).join(", "));
+
+  // PRINTED MATERIAL ESTIMATE
+  sections.push("PRINTED MATERIAL ESTIMATE");
+  sections.push("Material volume: " + g.printedMaterialCm3.toFixed(1) + " cm3");
+  if (p.masse) {
+    sections.push("Mass: " + p.masse.gesamt);
+    sections.push("Shells: " + p.masse.waende);
+    sections.push("Skin: " + p.masse.festmaterial);
+    sections.push("Infill: " + p.masse.fuellung);
+  }
+
+  // SLICER SETTINGS
+  sections.push("SLICER SETTINGS");
+  sections.push("Walls: " + s.wandlinien + " lines (" + s.wandstaerkeMm + " mm)");
+  sections.push("Infill: " + s.infillProzent + "% " + s.infillMuster);
+  sections.push("Layer height: " + s.schichthoeheMm + " mm");
+  sections.push("Top/Bottom layers: " + s.topLayer + "/" + s.bottomLayer);
+  sections.push("Flow: " + s.flow);
+
+  // TASK
+  sections.push(t('ai.task'));
+
+  var userContent = sections.join("\n");
+  return [{ role: "system", content: sys }, { role: "user", content: userContent }];
 }
 
 // Kopiert den fertigen KI-Prompt (Single-File-Modus).
@@ -3590,79 +3696,104 @@ async function aiCopyPrompt() {
 // Fix 2: lokaler Proxy (kilo_proxy.py) zuerst - Kilo sendet kein ACAO-Header,
 // direkte Browser-Calls scheitern daher immer an CORS. Same-origin /api/kilo
 // umgeht das; Direkt-Call bleibt Fallback (falls Kilo je CORS oeffnet).
-async function aiPostKilo(payload) {
-  // Single-File-Modus: KEIN lokaler Proxy. Unter http(s) ein Direktversuch
-  // (Kilo sendet derzeit keinen ACAO-Header -> Browser blockt ggf. mit CORS).
-  // Unter file:// gar kein fetch (Browser wuerde file:/// bzw. CORS werfen).
-  var proto = "";
-  try { proto = window.location ? window.location.protocol : ""; } catch (eP0) { proto = ""; }
+async function aiPostKilo(payload, signal) {
+  var proto = window.location ? window.location.protocol : "";
   if (proto !== "http:" && proto !== "https:") {
     throw new Error(t('ai.fileHint'));
   }
-  var body = JSON.stringify(payload);
-  var sig = window.__aiAbort ? window.__aiAbort.signal : undefined;
   return await fetch(AI_GATEWAY_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=UTF-8" },
-    body: body,
-    signal: sig
+    body: JSON.stringify(payload),
+    signal: signal
   });
 }
-async function callKiloGateway(messages, model, maxTokens, onToken) {
-  var ctrl = new AbortController();
-  window.__aiAbort = ctrl;
-  var resp = await aiPostKilo({ model: model, messages: messages, stream: true, max_tokens: maxTokens });
-  if (!resp.ok) {
-    var detail = "";
-    try { detail = await resp.text(); } catch (eT) { detail = ""; }
-    throw new Error("HTTP " + resp.status + (detail ? " - " + detail.slice(0, 200) : ""));
+
+function triggerUserAbort() {
+  if (window.__aiAbort) {
+    window.__aiAbort.abort('USER_ABORT');
   }
-  // Non-Streaming-Fallback: falls nach 8 s kein Token kam (Kilo haelt
-  // SSE teils offen), Antwort in einem Stueck holen und auf einmal zeigen.
-  var gotToken = false;
-  var wrapToken = function (tok) { gotToken = true; onToken(tok); };
-  var ctype = "";
-  try { ctype = resp.headers.get("Content-Type") || ""; } catch (eH) { ctype = ""; }
-  if (ctype.indexOf("application/json") >= 0) {
-    var full = await resp.json();
-    var text = (full.choices && full.choices[0] && full.choices[0].message && full.choices[0].message.content) || "";
-    if (full.model) usedModel = full.model;
-    if (text) wrapToken(text);
+}
+
+async function callKiloGatewayWithInactivity(messages, model, maxTokens, onToken, inactivityMs = 8000) {
+  const controller = new AbortController();
+  const signal = controller.signal;
+  window.__aiAbort = controller;
+
+  let timerId = null;
+  let usedModel = model;
+
+  const resetInactivityTimer = () => {
+    if (timerId) clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      controller.abort('INACTIVITY_TIMEOUT');
+    }, inactivityMs);
+  };
+
+  try {
+    const resp = await aiPostKilo({ model, messages, stream: true, max_tokens: maxTokens }, signal);
+
+    if (!resp.ok) {
+      throw new Error(`HTTP ${resp.status}`);
+    }
+
+    resetInactivityTimer();
+
+    const reader = resp.body.getReader();
+    const dec = new TextDecoder();
+    let buf = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      resetInactivityTimer();
+
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split("\n");
+      buf = lines.pop();
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("data:")) {
+          const data = trimmed.slice(5).trim();
+          if (data === "[DONE]") {
+            if (timerId) clearTimeout(timerId);
+            return { ok: true, model: usedModel };
+          }
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.model) usedModel = parsed.model;
+            const content = parsed.choices?.[0]?.delta?.content;
+            if (content) onToken(content);
+          } catch (e) { /* Teilstücke ignorieren */ }
+        }
+      }
+    }
+
+    if (timerId) clearTimeout(timerId);
     return { ok: true, model: usedModel };
-  }
-  var reader = resp.body.getReader();
-  var dec = new TextDecoder();
-  var buf = "";
-  var usedModel = model;
-  for (;;) {
-    var rd = await reader.read();
-    if (rd.done) break;
-    buf += dec.decode(rd.value, { stream: true });
-    var lines = buf.split("\n");
-    buf = lines.pop();
-    for (var li = 0; li < lines.length; li++) {
-      var t = lines[li].trim();
-      if (!t || t.indexOf("data:") !== 0) continue;
-      var data = t.slice(5).trim();
-      if (data === "[DONE]") return { ok: true, model: usedModel };
-      try {
-        var j = JSON.parse(data);
-        if (j.model) usedModel = j.model;
-        var d = (j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content) || "";
-        if (d) wrapToken(d);
-      } catch (eJ) { /* Teilsatz */ }
+
+  } catch (err) {
+    if (timerId) clearTimeout(timerId);
+
+    if (signal.aborted) {
+      if (signal.reason === 'INACTIVITY_TIMEOUT') {
+        throw new Error("INACTIVITY_TIMEOUT");
+      }
+      if (signal.reason === 'USER_ABORT') {
+        throw new Error("USER_ABORT");
+      }
+      throw new Error("AI_ABORTED");
+    }
+    throw err;
+
+  } finally {
+    if (timerId) clearTimeout(timerId);
+    if (window.__aiAbort === controller) {
+      window.__aiAbort = null;
     }
   }
-  if (gotToken) return { ok: true, model: usedModel };
-  // Stream blieb leer/offen: einmalig non-streaming nachholen.
-  try { if (reader.cancel) await reader.cancel(); } catch (eC) { /* egal */ }
-  var resp2 = await aiPostKilo({ model: model, messages: messages, stream: false, max_tokens: maxTokens });
-  if (!resp2.ok) return { ok: true, model: usedModel };
-  var full2 = await resp2.json();
-  var text2 = (full2.choices && full2.choices[0] && full2.choices[0].message && full2.choices[0].message.content) || "";
-  if (full2.model) usedModel = full2.model;
-  if (text2) wrapToken(text2);
-  return { ok: true, model: usedModel };
 }
 
 // Button-State umschalten.
@@ -3677,7 +3808,6 @@ function aiSetRunning(running) {
     stop.classList.toggle("hidden", !running);
     stop.classList.toggle("flex", running);
   }
-  if (!running) window.__aiAbort = null;
 }
 
 // Copy-Button verdrahten (Single-File-Modus).
@@ -3753,26 +3883,31 @@ async function runAIAnalysis() {
     box.innerHTML = "<p class='text-slate-500 italic text-center py-6'>" + t('ai.noModel') + "</p>";
     return;
   }
+
   var mEl = document.getElementById("aiModelSelect");
   var model = (mEl && mEl.value) || "kilo-auto/free";
   var payload = gatherAIPayload();
-  var lead = "";
+
   try {
     var proto = window.location ? window.location.protocol : "";
     if (proto === "http:" || proto === "https:") {
       var tEl = document.getElementById("aiTokensSelect");
       var maxTokens = (tEl && parseInt(tEl.value, 10)) || 1536;
       aiSetRunning(true);
+
       box.innerHTML = "<div class='py-8 text-center text-cyan-400 text-xs'>" + t('ai.asking', { m: model })
         + "</div><div id='aiStreamOut' class='text-[11px] text-slate-300 whitespace-pre-wrap'></div>";
       var out = document.getElementById("aiStreamOut");
       var acc = "";
       var messages = buildAIMessages(payload);
-      var res = await callKiloGateway(messages, model, maxTokens, function (tok) {
+
+      const res = await callKiloGatewayWithInactivity(messages, model, maxTokens, (tok) => {
         acc += tok;
         if (out) out.textContent = acc;
-      });
+      }, 8000);
+
       aiSetRunning(false);
+
       if (acc.trim()) {
         var safe = acc.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         box.innerHTML = "<div class='p-2.5 rounded-lg bg-slate-900 border border-cyan-900/50'>"
@@ -3782,17 +3917,26 @@ async function runAIAnalysis() {
         return;
       }
     } else {
-      lead = t('ai.fileHint');
+      aiLocalTips(payload, t('ai.fileHint'));
+      return;
     }
   } catch (err) {
-    try { aiSetRunning(false); } catch (eS) {}
-    if (err && err.name === "AbortError") {
+    aiSetRunning(false);
+
+    if (err.message === "USER_ABORT") {
       box.innerHTML = "<p class='text-slate-500 italic text-center py-6'>" + t('ai.aborted') + "</p>";
       return;
     }
-    lead = t('ai.gatewayHint', { e: ((err && err.message) || err) });
+
+    let lead = "";
+    if (err.message === "INACTIVITY_TIMEOUT") {
+      lead = "KI-Server antwortet nicht mehr (Inaktivitäts-Timeout 8s). Lokale Einschätzung aktiv:";
+    } else {
+      lead = t('ai.gatewayHint', { e: (err.message || err) });
+    }
+
+    aiLocalTips(payload, lead);
   }
-  aiLocalTips(payload, lead);
 }
 function runGeminiAnalysis() { return runAIAnalysis(); }
 
@@ -4543,7 +4687,7 @@ async function vxSchaetzeObjekt(P, oid, dz, onTick) {
 
     const S = new Uint8Array(nx * ny * nz);
 
-    const neg = new Uint8Array(nx * ny * nz);
+    let neg = new Uint8Array(nx * ny * nz);
 
     for (let mi = 0; mi < meshes.length; mi++) {
 
@@ -4562,6 +4706,7 @@ async function vxSchaetzeObjekt(P, oid, dz, onTick) {
     }
 
     for (let k = 0; k < S.length; k++) if (neg[k]) S[k] = 0;
+    neg = null;
 
     const voxCm3 = dx * dx * dz / 1000;
 
@@ -4598,9 +4743,8 @@ async function vxSchaetzeObjekt(P, oid, dz, onTick) {
 
         const hist = new Uint32Array(33 * 8 * 8);
 
-        const dTop = new Uint8Array(nx * ny * nz);
-
-        const dBot = new Uint8Array(nx * ny * nz);
+        // dt/db liegen jeweils sicher im Bereich 0..7; daher zwei 4-Bit-Werte pro Voxel in einem Byte.
+        const dPacked = new Uint8Array(nx * ny * nz);
 
         for (let jj = 0; jj < ny; jj++) {
 
@@ -4610,13 +4754,14 @@ async function vxSchaetzeObjekt(P, oid, dz, onTick) {
                 // Spalte in massive Laeufe zerlegen (Luecken trennen).
                 let k = 0;
                 while (k < nz) {
-                    if (!S[base + k]) { dTop[base + k] = 0; dBot[base + k] = 0; k++; continue; }
+                    if (!S[base + k]) { dPacked[base + k] = 0; k++; continue; }
                     let k0 = k;
                     while (k < nz && S[base + k]) k++;
                     const k1 = k - 1, L = k1 - k0 + 1;
                     for (let q = k0; q <= k1; q++) {
-                        dTop[base + q] = Math.min(7, k1 - q + 1);
-                        dBot[base + q] = Math.min(7, q - k0 + 1);
+                        const dt = Math.min(7, k1 - q + 1);
+                        const db = Math.min(7, q - k0 + 1);
+                        dPacked[base + q] = (dt << 4) | db;
                     }
                     void L;
                 }
@@ -4695,7 +4840,10 @@ async function vxSchaetzeObjekt(P, oid, dz, onTick) {
 
                 if (gb < 0) gb = 0; else if (gb > 32) gb = 32;
 
-                hist[gb * 64 + dTop[cell] * 8 + dBot[cell]]++;
+                const packedVal = dPacked[cell];
+                const dt = packedVal >> 4;
+                const db = packedVal & 0x0F;
+                hist[gb * 64 + dt * 8 + db]++;
 
             }
 
@@ -4898,7 +5046,7 @@ function vxHistAuswertungGewichtet(hist, bandBin, nOben, nUnten, dz,
 
 function vxHistAuswertung(hist, bandBin, nOben, nUnten, dz) {
     // nOben/nUnten sind Dicken in mm, dz ist die Hoehe einer Raster-Schicht in mm.
-    // dTop/dBot zaehlen Raster-Schichten -> fraktionaler Anteil in mm statt der alten
+    // dPacked enthaelt dt/db als 4-Bit-Werte -> fraktionaler Anteil in mm statt der alten
     // max(1, round(...))-Spruenge, die bei grobem dz die Haut vervielfachten.
 
     let innen = 0, haut = 0;
