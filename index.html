@@ -173,6 +173,7 @@
                 'ai.recommend': 'KI-Empfehlung ({m})',
                 'ai.basisMass': 'Basis: Masse {g} | anonym via Kilo Gateway (:free).',
                 'ai.fileHint': 'Hinweis: file://-Modus - Direktabfrage blockiert der Browser (CORS). Nutze <b>Prompt kopieren</b>.',
+                'ai.noModel': 'Bitte zuerst eine 3MF- oder STL-Datei laden.',
                 'ai.aborted': 'Abgebrochen.',
                 'ai.gatewayHint': 'Hinweis: KI-Gateway nicht erreichbar ({e}). Lokale Einschätzung + <b>Prompt kopieren</b> für ChatGPT/Claude/Kilo.',
                 'ai.localAssess': 'Lokale Einschätzung: ',
@@ -252,6 +253,7 @@
                 'ai.pMat': 'Mat: {m} D={d} | Masse: {g} W:{w} F:{f} I:{i}',
                 'ai.pPlates': 'Platten: ',
                 'ai.pObj': 'Obj',
+                'ai.pPlateSingle': 'Platte: {p} ({g})',
                 'ai.pParts': 'Teile: ',
                 'ai.pNoFile': 'k.A.',
                 'lang.de': 'Deutsch',
@@ -403,6 +405,7 @@
                 'ai.recommend': 'AI recommendation ({m})',
                 'ai.basisMass': 'Basis: mass {g} | anonymous via Kilo Gateway (:free).',
                 'ai.fileHint': 'Note: file:// mode - direct query blocked by the browser (CORS). Use <b>Copy prompt</b>.',
+                'ai.noModel': 'Please load a 3MF or STL file first.',
                 'ai.aborted': 'Canceled.',
                 'ai.gatewayHint': 'Note: AI gateway unreachable ({e}). Local estimate + <b>Copy prompt</b> for ChatGPT/Claude/Kilo.',
                 'ai.localAssess': 'Local assessment: ',
@@ -482,6 +485,7 @@
                 'ai.pMat': 'Mat: {m} D={d} | mass: {g} W:{w} S:{f} I:{i}',
                 'ai.pPlates': 'Plates: ',
                 'ai.pObj': 'pcs',
+                'ai.pPlateSingle': 'Plate: {p} ({g})',
                 'ai.pParts': 'Parts: ',
                 'ai.pNoFile': 'n/a',
                 'lang.de': 'Deutsch',
@@ -1300,6 +1304,16 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             hidePlateGrid();
             meshStats.positiveCount = 0;
             meshStats.negativeCount = 0;
+            window.__modelLoaded = false;
+            updateAIModelState();
+        }
+
+        function updateAIModelState() {
+            var btn = document.getElementById('btnRunAI');
+            if (!btn) return;
+            btn.disabled = !window.__modelLoaded;
+            btn.classList.toggle('opacity-50', !window.__modelLoaded);
+            btn.classList.toggle('cursor-not-allowed', !window.__modelLoaded);
         }
 
         async function parse3MFAndRender(file) {
@@ -2029,6 +2043,9 @@ let anchorData = null;    // Metadata/filament_anchors.json (Slot vorhanden, wir
             // Frame camera and calculate active statistics
             focusOnActivePlate();
             recalculatePlateStats();
+
+            window.__modelLoaded = currentMeshGroup.children.length > 0;
+            updateAIModelState();
 
             // Nach dem Laden die Druckplatten-Uebersicht als 3xX-Raster zeigen
             // (nur bei echten Mehrplatten-Projekten, nicht bei einzelnen STL/Modellen).
@@ -3473,6 +3490,25 @@ function gatherAIPayload() {
   if (!platten.length && typeof plateMap !== 'undefined' && plateMap) {
     plateMap.forEach(function (arr, k) { platten.push({ platte: String(k), objekte: (arr || []).length }); });
   }
+  // NUR die aktuell ausgewählte Platte in das Payload und den Prompt aufnehmen
+  var selectedPlatte = null;
+  if (activePlateId !== 'all' && activePlateId != null) {
+    selectedPlatte = { platte: String(activePlateId) };
+    if (typeof vxMasseProPlatte === 'function') {
+      var mp = vxMasseProPlatte();
+      if (mp && mp[selectedPlatte.platte] != null) {
+        selectedPlatte = {
+          platte: String(activePlateId),
+          gewichtG: +mp[activePlateId].g.toFixed(1),
+          volumenCm3: +mp[activePlateId].cm3.toFixed(1),
+          filamentM: +mp[activePlateId].m.toFixed(1),
+          objekte: mp[activePlateId].n
+        };
+      }
+    } else if (plateMap && plateMap.get(activePlateId)) {
+      selectedPlatte.objekte = (plateMap.get(activePlateId) || []).length;
+    }
+  }
   var ss = (typeof slicerSettings !== 'undefined') ? slicerSettings : null;
   var lwProf = (ss && ss.lineWidthMm) || meshStats.lineWidthMm || 0.45;
   var lhProf = (ss && ss.layerHeightMm) || 0.2;
@@ -3503,7 +3539,10 @@ function gatherAIPayload() {
     geometrie: { druckvolumenCm3: meshStats.volumeCm3 || 0, vollvolumenCm3: meshStats.volumeSolidCm3 || 0, oberflaecheCm2: meshStats.surfaceAreaCm2 || 0, dreiecke: meshStats.triangleCount || 0, bauvolumenMm: { x: +(meshStats.sizeX || 0).toFixed(1), y: +(meshStats.sizeY || 0).toFixed(1), z: +(meshStats.sizeZ || 0).toFixed(1) }, objektzahl: meshStats.objectCount || objects.length, objekte: objects },
     slicer: slicer,
     masse: { gesamt: txt('estMass'), waende: txt('massWalls'), festmaterial: txt('massSkin'), fuellung: txt('massInfill'), brim: txt('massBrim'), filamentLaenge: txt('massMeter'), scope: txt('massScope') },
-    platten: platten, aktivePlatte: plateLbl, plattenzahl: (typeof plateMap !== 'undefined' && plateMap) ? plateMap.size : 0
+    platten: (selectedPlatte ? [selectedPlatte] : platten),
+    aktivePlatte: plateLbl,
+    plattenzahl: (selectedPlatte ? 1 : (typeof plateMap !== 'undefined' && plateMap) ? plateMap.size : 0),
+    selectedPlatte: selectedPlatte
   };
 }
 
@@ -3515,7 +3554,9 @@ function buildAIMessages(p) {
   var u3 = t('ai.pSlicer', { w: s.wandlinien, t: s.wandstaerkeMm, i: s.infillProzent, m: s.infillMuster });
   var u4 = t('ai.pLayers', { t: s.topLayer, b: s.bottomLayer, h: s.schichthoeheMm, f: s.flow });
   var u5 = t('ai.pMat', { m: s.material, d: s.dichte, g: p.masse.gesamt, w: p.masse.waende, f: p.masse.festmaterial, i: p.masse.fuellung });
-  var u6 = t('ai.pPlates') + p.platten.map(function (x) { return x.platte + ":" + (x.gewichtG != null ? x.gewichtG + "g" : x.objekte + t('ai.pObj')); }).join(" | ");
+  var u6 = (p.selectedPlatte)
+    ? t('ai.pPlateSingle', { p: p.selectedPlatte.platte, g: p.selectedPlatte.gewichtG != null ? p.selectedPlatte.gewichtG + "g" : (p.selectedPlatte.objekte || 0) + t('ai.pObj') })
+    : t('ai.pPlates') + p.platten.map(function (x) { return x.platte + ":" + (x.gewichtG != null ? x.gewichtG + "g" : x.objekte + t('ai.pObj')); }).join(" | ");
   var u7 = t('ai.pParts') + g.objekte.slice(0, 20).map(function (o, i) { return (i + 1) + "." + o.name + " " + o.volumenCm3 + "cm3"; }).join("; ");
   var u8 = t('ai.task');
   return [{ role: "system", content: sys }, { role: "user", content: [u, u2, u3, u4, u5, u6, u7, u8].join(" / ") }];
@@ -3523,6 +3564,10 @@ function buildAIMessages(p) {
 
 // Kopiert den fertigen KI-Prompt (Single-File-Modus).
 async function aiCopyPrompt() {
+  if (!window.__modelLoaded) {
+    showToast(t('ai.noModel'));
+    return;
+  }
   var payload = gatherAIPayload();
   var msgs = buildAIMessages(payload);
   var txt = msgs.map(function (m) { return (m.role === 'user' ? t('ai.taskHead') + '\n' : t('ai.sysHead') + '\n') + m.content; }).join('\n\n---\n\n');
@@ -3646,6 +3691,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function aiLocalTips(payload, leadHtml) {
   var box = document.getElementById("aiResultBox");
   if (!box) return;
+  if (!window.__modelLoaded) {
+    box.innerHTML = "<p class='text-slate-500 italic text-center py-6'>" + t('ai.noModel') + "</p>";
+    return;
+  }
   var p = payload || gatherAIPayload();
   var s = p.slicer || {};
   var g = p.geometrie || {};
@@ -3700,6 +3749,10 @@ function aiLocalTips(payload, leadHtml) {
 async function runAIAnalysis() {
   var box = document.getElementById("aiResultBox");
   if (!box) return;
+  if (!window.__modelLoaded) {
+    box.innerHTML = "<p class='text-slate-500 italic text-center py-6'>" + t('ai.noModel') + "</p>";
+    return;
+  }
   var mEl = document.getElementById("aiModelSelect");
   var model = (mEl && mEl.value) || "kilo-auto/free";
   var payload = gatherAIPayload();
@@ -3760,6 +3813,7 @@ function runGeminiAnalysis() { return runAIAnalysis(); }
    Skirt, Ironing (die UI weist darauf hin). */
 
 window.__raw3mf = window.__raw3mf || { modelXml: null, modelSettingsXml: null, projectSettings: null, fileName: '' };
+window.__modelLoaded = false;
 
 // Keine Fit-Faktoren: die Physik steckt in den Profilparametern (Linienbreiten,
 // Schalendicken, Dichte, Flow) und in der exakt hergeleiteten Zellgeometrie.
